@@ -1,27 +1,21 @@
-# Unravelling the Probabilistic Forest — TL;DR
+# Summary: Unravelling the Probabilistic Forest
 
-| Aspect | Detail |
-|--------|--------|
-| **Title** | Unravelling the Probabilistic Forest: Arbitrage in Prediction Markets |
-| **Date** | August 5, 2025 |
-| **Authors** | Oriol Saguillo et al. |
-| **Link** | https://arxiv.org/abs/2508.03474 |
+**arxiv.org/abs/2508.03474**
 
-## In one sentence
+## One-Page TL;DR
 
-The first empirical study proving that $40M+ was extracted from Polymarket via two specific types of arbitrage.
+Polymarket's binary-condition design creates structural arbitrage opportunities. The paper identifies two types:
 
-## Two types of arbitrage detected
+1. **Market Rebalancing Arbitrage:** Within a single market, buy YES + NO when their sum < $1.00 and wait for resolution. Or in multi-condition markets, rebalance across outcome tokens to a risk-free position.
 
-| Type | Description | Profit Share |
-|------|-------------|--------------|
-| **Market Rebalancing Arb** | YES+NO < $1.00 within single market | ~80% of arb profit |
-| **Combinatorial Arb** | Mispricing across logically linked markets | ~20% of arb profit |
+2. **Combinatorial Arbitrage:** Across related markets (e.g., "Biden wins popular vote" vs "Biden wins election"), when the implied joint probabilities violate basic probability axioms.
 
-## Why 62% of LLM-detected dependencies fail
+**Magnitude:** ~$40M extracted in one year.
 
-A follow-up analysis (Navnoor Bawa) found that 62% of dependencies detected by LLMs between markets don't generate profit — the paper's finding is that real arb requires deep microstructure understanding, not surface-level correlation.
+**Key empirical findings:**
+- Most arbitrage profits concentrate in high-volume crypto markets (BTC 15-min, ETH 1-hour)
+- Simple YES+NO bundle arbitrage is now mostly captured by HFT bots
+- Combinatorial arbitrage persists longer but requires more complex detection
+- Arbitrage activity improves market efficiency (reduces pricing errors)
 
-## Practical takeaway
-
-Focus on **Market Rebalancing Arb** (YES+NO < $1) for higher probability, **Combinatorial Arb** for higher margins but more complexity.
+**For builders:** The paper provides the theoretical foundation and measurement methodology. Combinatorial arbitrage detection requires modeling event dependency graphs — the most promising frontier for algorithmic arb.
