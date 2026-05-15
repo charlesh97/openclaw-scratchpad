@@ -1,36 +1,37 @@
 # Cross-Platform Arbitrage Bot (Polymarket ↔ Kalshi)
 
-**Source:** https://github.com/realfishsam/prediction-market-arbitrage-bot
+**Source:** https://github.com/realfishsam/prediction-market-arbitrage-bot  
+**Recommendation:** YES
 
-## What it does
+## What It Does
 
-A bot that detects and executes arbitrage strategies between **Polymarket** and **Kalshi** — the two largest prediction markets. Built with pmxt.dev, it auto-buys low and sells high across platforms when price discrepancies exist for the same event.
+An educational bot that detects and executes synthetic arbitrage strategies between Polymarket and Kalshi. Implements "synthetic arbitrage": buying YES on one platform and NO on the other for the same outcome, locking in profit when prices converge. Uses fuzzy matching (Jaccard + Levenshtein distance) to pair outcomes across platforms.
 
-## Key features
+## Example Arbitrage
 
-- **Cross-platform price comparison:** Matches identical events on both platforms
-- **Automated execution:** Places orders on both sides simultaneously
-- **fee-aware calculations:** Accounts for platform fees when computing arbitrage profit
-- **Real-time monitoring:** Continuous scanning for opportunities
+- Polymarket: Kevin Warsh YES = 41¢
+- Kalshi: Kevin Warsh NO = 57¢
+- Total cost: 98¢ → Guaranteed 2¢ profit per share
 
-## Why it matters
+## Key Features
 
-Cross-platform arb is one of the most reliable strategies because prices *must* converge to $1.00 at resolution on both platforms. Any persistent price gap is a genuine arbitrage opportunity. Polymarket removing the 500ms taker delay in early 2026 makes execution more competitive but also more reliable.
+- Cross-platform price scanning via pmxt.dev API
+- Two arbitrage strategies (YES on Polymarket + NO on Kalshi, and vice versa)
+- YOLO mode (all-in on best opportunity) or CONSERVATIVE mode
+- Fuzzy matching handles naming variations across platforms
+- Dry run mode for testing
+
+## Why It Matters
+
+Directly addresses the $40M+ arbitrage opportunity documented in the "Unravelling the Probabilistic Forest" paper. Cross-platform arbitrage is one of the most mechanically sound strategies because it exploits real price differences between two marketplaces for the same underlying event.
 
 ## Implementability: 4/5
 
-Well-documented bot with pmxt.dev integration. Requires API keys for both platforms. PMXT abstracts most of the complexity.
+Simple Node.js application, easy to configure. Requires API keys for both Polymarket and Kalshi. The pmxt.dev API handles unified access.
 
 ## Risks
 
-- Both platforms may not list identical markets
-- Withdrawal/settlement timing differences across platforms
-- Fee structures differ — must compute net profit carefully
-- Latency advantage matters — dedicated RPC needed
-
-## Next Steps
-
-1. Set up Polymarket API credentials
-2. Set up Kalshi API credentials (requires KYC)
-3. Deploy pmxt.dev bridge
-4. Run paper trading for 1 week to validate spread detection
+- Requires Kalshi account (US only)
+- Simultaneous execution is critical
+- Liquidity on both platforms must be sufficient
+- Regulatory risk on Kalshi side
