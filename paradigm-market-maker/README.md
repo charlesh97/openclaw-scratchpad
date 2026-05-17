@@ -1,36 +1,38 @@
-# Paradigm Prediction Market Maker (#2 Place)
+# Paradigm Prediction Market Maker (octavi42)
 
 **Source:** https://github.com/octavi42/prediction-market-maker
-**Type:** Market-making strategy
-**Recommendation:** MEDIUM
 
 ## What It Does
+A market-making strategy that placed **#2 in Paradigm's Automated Research Hackathon** (April 9, 2026). The strategy was refined across 110 iterations in 8 hours, achieving a mean edge of $41.09 per simulation — just $1.23 behind the winner.
 
-Market-making strategy that placed **#2 in Paradigm's Prediction Market Challenge** — 110 iterations in 8 hours. The challenge involved competing to build the best market-making strategy for prediction markets.
-
-The paper covers:
-- **Quoting mechanics** — How to set bid/ask prices around the true probability
-- **Adverse selection** — What happens when informed traders systematically trade against you
-- **Inventory risk** — Managing your exposure when prices move against your position
-- **Order sizing** — How much to quote at each price level
+The challenge: build a market-making strategy for a simulated binary YES/NO prediction market with a FIFO limit order book, where the strategy can only place passive (limit) orders.
 
 ## Why It Matters
+This is the first publicly documented, benchmarked strategy from a structured prediction market-making competition. Key insights from 110 iterations:
 
-Understanding market-making theory is essential for any prediction market trading strategy, even if you primarily do arb rather than LP. The core insight: market makers profit by capturing the spread between uninformed flow (random noise) and true probability (signal). When traders with better information (informed flow) trade against you, you lose.
+- **~60% of edge comes from identifying and exploiting a "monopoly regime"** — when the competitor agent's ladder is thin, you can dominate the spread with wide, high-volume quotes
+- **The other ~40% comes from normal regime quoting** — volatility-adjusted quote filtering, intelligent sizing relative to expected retail order flow
+- **Inventory management is critical** — removing skew from the strategy costs -$7 in edge (17% of total)
+- **Quote filtering beats brute force** — sitting out high-volatility periods prevents adverse selection by the arbitrageur agent
 
-## Key Structural Insights
+## Architecture
+- Python-based simulation engine
+- Strategy parameters optimized via 110 iterative runs
+- Competitor model: static hidden ladder, replenishes consumed levels
+- Arbitrageur model: knows true probability, sweeps mispriced orders
+- Retail model: random market orders (~0.25/step, ~$4.5 mean notional)
 
-1. **Spread capture** — Place bids below true probability and asks above; earn the spread when noise traders cross
-2. **Adverse selection mitigation** — Don't size up aggressively when you see large order flow (informed traders know something)
-3. **Inventory management** — If you're long too many YES shares, adjust quotes to offload inventory before the event resolves
-4. **Position limits** — Set hard limits on inventory to prevent single-event catastrophe
+## Risks
+- Simulated on stylized order book — real Polymarket microstructure differs significantly (gas costs, latency, multiple competitors)
+- The "monopoly regime" insight may not transfer to live markets with dozens of competing MMs
+- Hackathon time horizon (8 hours) doesn't cover multi-week strategy drift
 
-## Implementability: 3/5
+## Implementability: 5/5
+**YES for email.** Complete open-source codebase, well-documented strategy analysis, Python implementation. The core insights (volatility-adjusted quoting, inventory skew, regime detection) are directly implementable on Polymarket via the CLOB API. Start with the monopoly regime detection as a paper-trading module.
 
-Good theoretical foundation and reference code, but no production deployment pipeline described. Best used as a reference architecture for building your own market-making logic.
-
-**Next steps:**
-1. Read the code and understand the quoting logic
-2. Implement the inventory tracking module
-3. Add position limit checks
-4. Backtest against historical Polymarket data
+## Next Steps
+1. Clone the repo and reproduce the simulation results
+2. Port the regime detection logic to live Polymarket data
+3. Replace the stylized order book with Polymarket CLOB snapshots
+4. Add gas cost model to the P&L simulation
+5. Paper trade the monopoly regime strategy on 15-min BTC markets
