@@ -1,34 +1,29 @@
-# Toward Black-Scholes for Prediction Markets
+# Toward Black Scholes for Prediction Markets (arXiv:2510.15205)
 
-**Source:** https://arxiv.org/abs/2510.15205  
-**Recommendation:** MEDIUM
+**Source:** https://arxiv.org/abs/2510.15205
+**Author:** Shaw Dalen
+**Published:** October 2025
 
-## Summary
-
-Proposes a logit jump-diffusion stochastic kernel for prediction markets — analogous to what Black-Scholes provided for options markets. Treats the traded probability p_t as a Q-martingale and exposes belief volatility, jump intensity, and cross-event dependence as quotable risk factors.
-
-## Key Contributions
-
-1. **Logit Jump-Diffusion Model** — A unifying stochastic framework for prediction market probabilities
-2. **Calibration Pipeline** — Filters microstructure noise, separates diffusion from jumps via EM algorithm
-3. **Risk-Neutral Drift Enforcement** — Ensures prices are consistent with no-arbitrage
-4. **Belief Volatility Surface** — Analogous to implied volatility surface in options
-5. **Derivative Layer** — Variance, correlation, corridor, and first-passage instruments
-
-## Empirical Results
-
-Reduces short-horizon belief-variance forecast error relative to diffusion-only and probability-space baselines. Supports both causal calibration and economic interpretability.
+## Key Finding
+Proposes a **logit jump-diffusion kernel** for prediction markets — analogous to Black-Scholes for options. The model treats the traded probability p_t as a Q-martingale and exposes belief volatility, jump intensity, and dependence as quotable risk factors.
 
 ## Why It Matters
+This is the first unified stochastic framework for prediction market pricing. If adopted, it would enable:
+- **Implied belief volatility surfaces** (like implied vol for options)
+- **Standardized quoting** of belief risk
+- **Hedging cross-market correlation risk**
+- **Calibration pipeline** that filters microstructure noise and separates diffusion from jumps
 
-If this framework gains adoption, it would revolutionize prediction market pricing — providing standardized tools for quoting, hedging, and transferring belief risk. Directly relevant to designing market-making strategies that account for jump risk and volatility clustering.
+## Key Innovations
+1. Logit jump-diffusion (probability-space equivalent of Black-Scholes)
+2. Risk-neutral drift enforcement via EM algorithm
+3. Belief-volatility surface analogous to option IV surfaces
+4. Derivative layer: variance, correlation, corridor, first-passage instruments
 
-## Implementability: 1/5 (Theoretical framework)
-
-Purely theoretical at this point. The framework could guide risk model design but no production-ready implementation exists.
+## Implementability: 3/5
+**MEDIUM** — mathematically sophisticated. The calibration pipeline (expectation-maximization for jump/diffusion separation) requires significant implementation effort. However, the core insight (belief volatility surface) is directly useful for market making.
 
 ## Next Steps
-
-- Implement the EM-based diffusion/jump separation
-- Build belief volatility surface for active Polymarket markets
-- Test the derivative layer on live data
+1. Implement the logit jump-diffusion calibration for Polymarket price series
+2. Build a belief volatility surface for BTC 15-min markets
+3. Use the surface to adjust market-making spread dynamically
