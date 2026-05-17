@@ -1,21 +1,25 @@
 # Summary: Unravelling the Probabilistic Forest
 
-**arxiv.org/abs/2508.03474**
+## Research Question
+What conditions give rise to arbitrage on Polymarket? Does arbitrage actually occur? Has anyone exploited it?
 
-## One-Page TL;DR
+## Dataset
+- Polymarket on-chain order book data: April 2024 — April 2025
+- 86 million transactions, 17,218 conditions, 6,487,193 bettors
 
-Polymarket's binary-condition design creates structural arbitrage opportunities. The paper identifies two types:
+## Methodology
+Used integer programming to detect arbitrage in condition sets. Heuristic reduction:
+1. **Timeliness filter:** Only consider markets resolved within similar timeframes
+2. **Topical similarity:** Group markets discussing related events
+3. **Combinatorial relationships:** Connected conditions through shared tokens
 
-1. **Market Rebalancing Arbitrage:** Within a single market, buy YES + NO when their sum < $1.00 and wait for resolution. Or in multi-condition markets, rebalance across outcome tokens to a risk-free position.
+## Key Results
+- 7,051 conditions with single-market arbitrage (41%)
+- $40M USD estimated realized profit from arb extraction
+- Combinatorial arb more common but smaller per-opportunity
+- Heuristic reduction is crucial: naive O(2^n) comparison is intractable for 17,218 conditions
 
-2. **Combinatorial Arbitrage:** Across related markets (e.g., "Biden wins popular vote" vs "Biden wins election"), when the implied joint probabilities violate basic probability axioms.
-
-**Magnitude:** ~$40M extracted in one year.
-
-**Key empirical findings:**
-- Most arbitrage profits concentrate in high-volume crypto markets (BTC 15-min, ETH 1-hour)
-- Simple YES+NO bundle arbitrage is now mostly captured by HFT bots
-- Combinatorial arbitrage persists longer but requires more complex detection
-- Arbitrage activity improves market efficiency (reduces pricing errors)
-
-**For builders:** The paper provides the theoretical foundation and measurement methodology. Combinatorial arbitrage detection requires modeling event dependency graphs — the most promising frontier for algorithmic arb.
+## Implications
+- Polymarket is far from efficient — $40M left on the table
+- The arb detection algorithm can be automated and deployed
+- Post-2026 dynamic fees may have reduced arb profitability
