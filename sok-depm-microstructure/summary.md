@@ -1,19 +1,16 @@
-# SoK: Market Microstructure for DePMs — TL;DR
+# Summary: SoK — Market Microstructure for DePMs
 
-| Aspect | Detail |
-|--------|--------|
-| **Title** | SoK: Market Microstructure for Decentralized Prediction Markets (DePMs) |
-| **Date** | October 17, 2025 |
-| **Authors** | Multiple (academic) |
-| **Link** | https://arxiv.org/abs/2510.15612 |
+## Scope
+Survey of decentralized prediction market microstructure as a methodological domain. Framing of open questions across venues without tick-level data.
 
-## In one sentence
+## Key Contributions
+1. Formal taxonomy of DePM architectures
+2. Information aggregation theory applied to prediction markets
+3. Open research questions mapped by venue type
+4. Bridging traditional market microstructure to DePM context
 
-A comprehensive academic survey that creates a taxonomy for understanding how prediction markets work at the microstructure level.
-
-## Key takeaways for bot strategy
-
-- **CLOB vs AMM:** Polymarket uses CLOB (like a stock exchange), which creates different arbitrage patterns than AMM-based markets
-- **Information asymmetry:** Professional traders consistently outperform retail due to faster data access and execution
-- **Wash trading:** Significant concern — up to 22% of trades may involve self-counterparty activity
-- **Price discovery quality:** Deregulation in 2025-2026 improved liquidity but may degrade signal quality
+## Open Questions Identified
+- How does CLOB vs. AMM architecture affect information aggregation speed?
+- Do prediction markets efficiently aggregate "thin" information (non-election events)?
+- What is the optimal fee structure for DePM liquidity provision?
+- How do cross-venue arbitrageurs affect DePM price discovery?
