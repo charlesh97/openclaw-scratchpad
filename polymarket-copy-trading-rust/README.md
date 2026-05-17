@@ -1,55 +1,24 @@
-# Polymarket Copy Trading Bot (Rust)
+# Polymarket Copy Trading Bot (Rust) — gamma-trade-lab
 
 **Source:** https://github.com/gamma-trade-lab/polymarket-copy-trading-bot
-**Recommendation:** MEDIUM
 
 ## What It Does
+High-performance Rust copy-trading bot for Polymarket. Real-time mirroring of top traders with low-latency detection and execution. Leverages Polymarket's removal of the ~500ms taker delay (Feb 2026) to focus on copy-trading alpha instead of latency arb.
 
-A high-performance Rust implementation of a copy-trading bot for Polymarket. Focuses on real-time mirroring of top traders with sub-millisecond latency detection and execution.
+## Why It Matters
+- **Rust advantage:** Sub-millisecond execution, no GC pauses, 99.9% WebSocket uptime
+- **25–45% lower gas costs** vs Python/TS implementations (in-memory aggregation)
+- **Multi-wallet tracking** (2–5 targets) with per-wallet risk params
+- **Tiered position sizing** with confidence multipliers
+- **Dry-run/shadow mode** for risk-free testing
 
-### Key Features
+## Key Insight
+After Feb 2026's delay removal, pure HFT/latency arb became much less profitable. Copy-trading captures directional alpha from proven traders instead of fighting for microseconds.
 
-- **Sub-millisecond execution latency** — 5-10x faster than Python/TypeScript equivalents
-- **Multi-wallet tracking** — monitors 2-5 target wallets simultaneously
-- **Copy trading**: mirrors top Polymarket traders with configurable multipliers
-- **Low resource usage** — runs comfortably on small VPS instances
-- **Order aggregation** — bundles trades for gas savings (25-45% reduction)
-- **Persistent state** — SQLite/RocksDB with crash recovery
-
-### Why Rust Matters for Polymarket
-
-The February 2026 removal of the ~500ms taker delay on crypto markets fundamentally changed the landscape. Pure HFT-style arbitrage became much harder. Copy trading in Rust provides a measurable edge because:
-
-- No GC pauses (unlike Python/Go/Java)
-- Predictable sub-millisecond WebSocket processing
-- 25-45% lower effective gas cost per mirrored trade
-- Zero crashes in 50+ hours of live mainnet runs
-
-### Architecture
-
-```
-Rust binary (single static binary)
-├── WebSocket/HTTP polling (Tokio async)
-├── Order aggregation engine (15-60s windows)
-├── Tiered position sizing
-├── In-memory + SQLite persistence
-└── Config.toml for wallet/risk parameters
-```
-
-## Risks
-
-- Copy trading is inherently dependent on target trader quality
-- Slippage, gas spikes, and adverse selection remain real
-- Not all copy-traded markets will be profitable
-- Rust ecosystem — less accessible for Python-native teams
-
-## Implementability: 4/5
-
-Production-tested Rust binary with documented deployment flow. Single static binary means easy deployment. Requires Rust toolchain for compilation.
+## Implementability: 3/5
+**MEDIUM** — requires Rust toolchain knowledge. Copy-trading strategy quality depends entirely on trader selection (need reliable signals). Performance advantages are real but diminishing as more Rust bots enter the space.
 
 ## Next Steps
-
-1. Clone and configure target wallets
-2. Start with dry-run / shadow mode
-3. Begin with conservative multipliers (0.5x)
-4. Analyze copy-trading alpha from top Polymarket traders
+1. Build a Polymarket whale tracker to identify consistently profitable wallets
+2. Port the copy-trading strategy to Python for rapid prototyping
+3. Run shadow mode on 2-3 target wallets for 2 weeks
