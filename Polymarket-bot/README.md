@@ -1,61 +1,30 @@
-# Polymarket-bot — 4-Strategy Polymarket Trading Bot
+# Polymarket-bot — 4 Strategies in One Bot
 
-**Source:** https://github.com/MrFadiAi/Polymarket-bot  
-**Status:** Actively maintained (v3.1 — January 2026)  
-**Language:** Python  
-**Recommendation:** ✅ YES — Top Pick for Email
+**Source:** https://github.com/MrFadiAi/Polymarket-bot
+**Recommendation:** ✅ YES — production-ready, actively maintained, great risk management
 
-## What It Does
+## What it does
 
-A unified trading bot that implements 4 distinct strategies for Polymarket prediction markets, with an auto-rotation system that switches between strategies based on real-time performance:
+A complete Node.js trading bot for Polymarket with **4 integrated strategies** and a web dashboard. Created by @Mr_CryptoYT, actively maintained (v3.1, Jan 2026).
 
-1. **Smart Money Strategy** — Tracks and mirrors trades from identified "smart" wallets (whales, profitable traders)
-2. **Momentum Strategy** — Detects short-term price momentum and streaks
-3. **Mean Reversion Strategy** — Bets against extreme pricing when probability diverges significantly from modeled fair value
-4. **Spread Arbitrage Strategy** — Captures YES+NO < $1.00 bundle arbitrages across related markets
+### 4 Strategies
+1. **Dip Arbitrage (DipArb)**: Buys YES tokens when price drops significantly below fair value; sells into rebounds
+2. **Copy Trading**: Mirrors top Polymarket traders with smart filtering (60%+ win rate, 1.5x profit factor)
+3. **Market Making**: Two-sided quoting to capture bid-ask spread
+4. **Cross-Platform Arbitrage**: Detects price differences between related Polymarket markets
 
-## Why It Matters
+### Risk Management (4-Layer Protection)
+- Daily max loss: 5%
+- Monthly max loss: 15%
+- Drawdown halt: 25% from peak
+- Total loss permanent halt: 40%
+- Smart Money Filtering: minimum $1.50 per DipArb position (guarantees exit)
 
-- **Multi-strategy rotation** handles different market regimes automatically — a sophisticated approach beyond single-strategy bots
-- v3.1 (Jan 2026) includes dynamic position sizing and enhanced risk management
-- Production-tested with dashboard UI and auto-rotation
-- Open source with 4 battle-tested strategies that can be studied individually and combined
-
-## Architecture
-
-```
-Polymarket-bot/
-├── strategies/
-│   ├── smart_money.py    — Whale/copy-trading detection
-│   ├── momentum.py       — Trend-following signals
-│   ├── mean_reversion.py — Statistical mispricing recovery
-│   └── spread_arb.py     — Bundle arbitrage detection
-├── core/
-│   ├── risk_manager.py   — Dynamic sizing, stop-loss, drawdown control
-│   ├── market_data.py    — Order book + trade feed ingestion
-│   └── executor.py       — CLOB API execution wrapper
-├── dashboard/            — Real-time performance UI
-└── config.yaml           — Strategy weights, thresholds, capital allocation
-```
-
-## Risks
-
-- **Strategy overlap risk:** Auto-rotation may allocate capital to temporarily-correlated strategies, amplifying drawdowns
-- **Latency dependency:** Spread arbitrage requires fast execution (sub-500ms) to capture fleeting YES+NO dislocations
-- **Smart Money strategy degrades** if whales switch wallets or use obfuscation
-- Platform-level changes (fee structure, API changes) can break assumptions across all 4 strategies simultaneously
-
-## Implementability: 4/5
-
-- Python-based, well-documented, clean separation of concerns
-- Requires Polymarket API key setup and Polygon RPC endpoint
-- Dashboard dependency adds deployment complexity but is optional
-- Can extract individual strategy modules for targeted backtesting
+## Implementability: 5/5
+Node.js, simple setup, excellent documentation, web dashboard, risk management built-in. Best option for getting started quickly.
 
 ## Next Steps
-
-1. Clone and run dry-mode on historical data for each strategy independently
-2. Backtest spread arbitrage strategy on 15-minute BTC markets (highest liquidity)
-3. Compare mean reversion signals against our own CLOB data pipeline
-4. Evaluate whether auto-rotation adds alpha vs. static strategy allocation
-5. Port relevant risk management logic (dynamic sizing, drawdown limits) into our bot
+1. Clone and run in dry-run mode
+2. Configure Telegram alerts
+3. Test DipArb strategy on 15-min BTC/ETH markets
+4. Gradually add more strategies
