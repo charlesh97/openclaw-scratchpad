@@ -1,19 +1,30 @@
-# Summary: Toward Black Scholes for Prediction Markets
+# Toward Black Scholes for Prediction Markets: A Unified Kernel and Market Maker's Handbook
 
-## Problem
-Prediction markets (Polymarket) lack a unifying stochastic kernel equivalent to Black-Scholes for options. Market makers face belief volatility, jump risk, and cross-event correlation without standardized hedging tools.
+**Source:** https://arxiv.org/abs/2510.15205
+**Published:** October 2025 (v2: April 2026)
 
-## Solution
-A logit jump-diffusion model where:
-- Traded probability p_t is a Q-martingale (drift = 0 in risk-neutral measure)
-- Two risk factors: diffusion (continuous belief volatility) and jump (discrete belief jumps)
-- EM algorithm separates jumps from diffusion in calibration
-- Output: belief-volatility surface across time and probability levels
+## Summary
 
-## Results
+Proposes a **logit jump-diffusion** framework as the "Black-Scholes for prediction markets" — a unifying stochastic kernel for pricing, quoting, and hedging prediction market risk.
+
+### Key Contributions
+
+1. **Logit Jump-Diffusion Kernel**: Treats traded probability p_t as a Q-martingale, exposing belief volatility, jump intensity, and dependence as quotable risk factors
+2. **Calibration Pipeline**: Filters microstructure noise, separates diffusion from jumps via expectation-maximization, enforces risk-neutral drift
+3. **Derivative Layer**: Defines variance, correlation, corridor, and first-passage instruments — analogous to volatility products in options markets
+
+### Results
 - Reduces short-horizon belief-variance forecast error vs. diffusion-only baselines
-- Economically interpretable parameters
-- Supports derivative instruments (variance swaps, correlation contracts) for prediction markets
+- Provides an "implied volatility" analogue for prediction markets
+- Works on both synthetic risk-neutral paths and real event data
 
 ## Why It Matters
-Provides the mathematical infrastructure for institutional-grade prediction market risk management. Enables quoting and hedging belief risk across venues like Polymarket — currently impossible without this framework.
+If prediction markets are to scale to institutional levels, they need standardized pricing tools — just as options needed Black-Scholes. This paper provides that framework.
+
+## Implementability: 1/5
+Highly mathematical (stochastic calculus, EM algorithm). Best used as conceptual foundation for pricing models, not directly deployable.
+
+## Next Steps
+1. Study the jump-diffusion calibration methodology
+2. Implement simplified belief-volatility surface for our portfolio
+3. Use the framework for sizing positions based on belief volatility
