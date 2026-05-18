@@ -1,24 +1,26 @@
-# Summary: Arbitrage Analysis in Polymarket NBA Markets
+# Arbitrage Analysis in Polymarket NBA Markets
 
-## Dataset
-- 75 million+ limit order book snapshots
-- 173 NBA games
-- Both Moneyline and Spread markets
+**Source:** https://arxiv.org/abs/2605.00864
+**Published:** April 2026
 
-## Key Results
-| Metric | Single-Market | Combinatorial |
-|--------|--------------|--------------|
-| Executable episodes | 7 | 290 |
-| Median duration | 3.6 seconds | Final minutes |
-| Median return | N/A | 101 bps |
-| Avg executable size | N/A | 14.8 shares |
-| Liquidity-constrained | N/A | 76.9% |
+## Summary
 
-## Key Insight
-"While executable mispricings exist, they are structurally bounded by liquidity, confining risk-free extraction strictly to the retail scale."
+Empirical study of arbitrage in Polymarket's NBA moneyline and spread markets during the 2025-2026 season.
 
-## Implications
-- Sports arb is possible but small-scale
-- Combinatorial arb (Moneyline × Spread) is the better opportunity
-- Focus on final minutes of live play when dislocations spike
-- Automated small-size execution (14.8 shares avg) is the right approach
+### Key Findings
+
+1. **Simple bundle arbitrage** (YES + NO < $1) is rarest — virtually nonexistent in liquid NBA markets
+2. **Combinatorial arbitrage** across Moneyline-Spread pairs is more frequent: **290 active episodes** concentrated in final minutes of live play
+3. **Structural bottleneck**: 76.9% of combinatorial opportunities constrained to average executable size of just **14.8 shares** (~$14.80)
+4. **Liquidity shallowness** is the primary friction preventing full correction of mispricings
+
+### Limits to Arbitrage
+Confirms the Shleifer and Vishny (1997) framework: even when mispricings are identified, execution frictions prevent exploitation at scale. "Risk-free" extraction is confined to retail scale.
+
+## Implication
+NBA markets offer genuine but tiny arb opportunities during high-volatility periods (final minutes). Not worth institutional deployment but viable for automated retail bots.
+
+## Next Steps
+1. Monitor NBA live games for cross-market dislocations in final minutes
+2. Build a lightweight scanner targeting Moneyline-Spread pairs
+3. Accept that position sizes will be capped at ~$15 per opportunity
