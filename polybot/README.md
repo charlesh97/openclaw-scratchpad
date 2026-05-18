@@ -1,46 +1,29 @@
-# Polybot — Polymarket Trading Infrastructure & Strategy Reverse-engineering Toolkit
+# Polybot — Enterprise Polymarket Trading Infrastructure
 
-**Source:** https://github.com/ent0n29/polybot  
-**Status:** Active  
-**Language:** Python  
-**Recommendation:** MEDIUM — Strong research value, infrastructure layer
+**Source:** https://github.com/ent0n29/polybot
+**Recommendation:** MEDIUM — professional architecture but heavy Java microservice setup
 
-## What It Does
+## What it does
 
-Polybot is an open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit. It provides the execution and market-data foundation for AWARE (the next product layer: trader intelligence, PSI indices, fund mirroring, API/UI). Think of it as the "data layer" for understanding how Polymarket strategies actually work by analyzing on-chain activity.
+Polybot is a **multi-service Java microservice system** for professional Polymarket trading:
 
-## Why It Matters
+- **Executor Service**: Order execution, paper/live modes, settlement
+- **Strategy Service**: Strategy runtime and market making
+- **Ingestor Service**: Market/user trade ingestion into ClickHouse
+- **Analytics Service**: Quantitative analysis and replication scoring
 
-- **Reverse-engineering approach** is unique — instead of implementing strategies, it analyzes what others are doing and exposes those patterns
-- Includes PSI (Polymarket Sentiment Index) calculation methodology
-- Fund mirroring capability can automatically replicate successful strategies
-- Provides a complete execution foundation (order placement, position tracking, PnL calculation)
+Built with ClickHouse + Redpanda event pipeline, Grafana monitoring, Prometheus metrics.
 
-## Architecture
+### Key Feature: Complete-Set Arbitrage
+Includes a built-in "complete-set arbitrage" strategy for Polymarket Up/Down binaries — buys YES + NO when sum < $1.
 
-```
-polybot/
-├── data/             — Market data ingestion (WebSocket + REST)
-├── analysis/         — Strategy detection from trade patterns
-├── mirror/           — Fund/copy trading engine
-├── psi/              — Polymarket Sentiment Index calculation
-└── exec/             — CLOB execution layer
-```
+### AWARE Layer
+Polybot is the foundation for AWARE (trader intelligence, PSI indices, fund mirroring, API/UI) — suggesting a roadmap to retail-facing products.
 
-## Implementability: 3/5
-
-- Data analysis layer is strong; execution layer needs hardening for production
-- AWARE layer is still in development
-- Good reference for building market intelligence pipelines
-
-## Risks
-
-- Reverse-engineering detected strategies may lag behind actual profitable strategies
-- Fund mirroring inherits all risks of followed wallets (wash trading, exit scams)
-- PSI index construction methodology needs independent validation
+## Implementability: 2/5
+Requires Java 21, Maven, Docker, ClickHouse, Redpanda/Kafka. Heavy infrastructure. Best suited for teams, not single traders.
 
 ## Next Steps
-
-1. Evaluate PSI index methodology — could feed into our own signal generation
-2. Backtest whether wallet-mirroring strategies outperform buy-and-hold on matched events
-3. Extract data ingestion pipeline as a reusable component for our bot
+1. Reference the arbitrage detection algorithm in research/ directory
+2. Extract the ClickHouse query patterns for trade analysis
+3. Monitor the AWARE repo for user-friendly interfaces
