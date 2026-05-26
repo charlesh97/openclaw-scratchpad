@@ -1,41 +1,40 @@
-# Unravelling the Probabilistic Forest — Arbitrage in Prediction Markets
+# Unravelling the Probabilistic Forest: Arbitrage in Prediction Markets
 
 **Source:** https://arxiv.org/abs/2508.03474  
-**Recommendation:** YES
+**Authors:** Oriol Saguillo, Vajiheh Ghafouri, Lucianna Kiffer, Guillermo Suarez-Tangil (IMDEA Networks Institute)  
+**Published:** August 2025 (revised May 2026)  
+**Type:** Academic paper (AFT 2025)
 
 ## Summary
 
-The first large-scale empirical analysis of arbitrage on Polymarket, analyzing 86 million transactions from April 2024 to April 2025. Documents $40M+ in extracted arbitrage profits across two distinct arbitrage forms.
+This paper presents the **first large-scale empirical analysis of arbitrage on Polymarket**, analyzing 86 million transactions across 17,218 conditions from April 2024 to April 2025. It identifies and measures two distinct forms of arbitrage:
 
-## Two Types of Arbitrage Identified
+1. **Market Rebalancing Arbitrage** (intra-market) — When YES + NO prices don't sum to $1.00 within a single market
+2. **Combinatorial Arbitrage** (inter-market) — Arbitrage spanning multiple logically related markets
 
-### 1. Market Rebalancing Arbitrage (Intra-Market)
-Occurs within a single market. YES + NO prices not summing to $1.00. The classic "free money" opportunity. Most common in newly created or volatile markets.
+### Key Findings
 
-### 2. Combinatorial Arbitrage (Inter-Market)
-Spans across multiple related markets. Exploits pricing inconsistencies between logically dependent conditions. Requires solving O(2^n) comparisons, reduced via heuristic-driven strategy.
-
-## Key Numbers
-
-- 17,218 total conditions analyzed
-- 7,051 conditions had single-market arbitrage
-- $40M+ realized profit extracted
-- 40% median deviation ($0.60) — market frequently deviates significantly from efficiency
-
-## Methodological Contribution
-
-Uses integer programming to detect arbitrage at scale. The heuristic reduction strategy based on timeliness, topical similarity, and combinatorial relationships makes the problem tractable, validated by expert input.
+- **7,051 conditions** had single-market arbitrage opportunities
+- **~$40 million in total arbitrage profits** extracted over the study period
+- Combinatorial arbitrage is rarer but larger per-opportunity
+- Arbitrage persists due to slow human reaction times and fragmented liquidity
+- Uses integer programming to detect combinatorial dependencies
 
 ## Why It Matters
 
-This is now the foundational empirical reference for Polymarket arbitrage. The $40M+ figure sets a floor on the total arbitrage opportunity. The methodology can be replicated and extended to build a live arbitrage detection system.
+- Empirically confirms that arbitrage exists at scale on Polymarket
+- Quantifies total extractable value (~$40M/year)
+- Provides a mathematical framework for detecting combinatorial arbitrage
+- Directly applicable to building automated arbitrage strategies
 
-## Implementability: 3/5
+## Implementability: 4/5
 
-The methodology is well-documented but implementing the integer programming solution for live detection requires significant development. However, the simpler market rebalancing arbitrage (YES+NO < $1) is straightforward to implement.
+- The integer programming framework can be translated to Python
+- Single-market arb detection is straightforward (YES+NO != $1)
+- Combinatorial arb requires mapping condition dependencies
+- Paper's methodology can guide implementation
 
 ## Next Steps
-
-- Implement the integer programming arbitrage detection
-- Build a live scanner for market rebalancing arbitrage
-- Extend analysis to combinatorial arb across related events
+1. Translate the integer programming arb detection into our codebase
+2. Implement single-market arb scanner first (lowest hanging fruit)
+3. Build condition dependency graph for combinatorial detection
