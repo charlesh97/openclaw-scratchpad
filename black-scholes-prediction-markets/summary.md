@@ -1,30 +1,16 @@
-# Toward Black Scholes for Prediction Markets: A Unified Kernel and Market Maker's Handbook
+# Black-Scholes for Prediction Markets — 1-Page TL;DR
 
-**Source:** https://arxiv.org/abs/2510.15205
-**Published:** October 2025 (v2: April 2026)
+## The Question
+Is there a unified mathematical framework for pricing prediction market securities?
 
-## Summary
+## Method
+Proposes a logit jump-diffusion model where traded probability is a martingale, with belief volatility and jump intensity as quotable risk factors.
 
-Proposes a **logit jump-diffusion** framework as the "Black-Scholes for prediction markets" — a unifying stochastic kernel for pricing, quoting, and hedging prediction market risk.
+## Key Results
+- Yes — a Black-Scholes-like framework is possible
+- Jump-diffusion captures news-driven probability shifts
+- Risk factors (vol, jumps) could be traded separately
+- Still theoretical — no empirical validation yet
 
-### Key Contributions
-
-1. **Logit Jump-Diffusion Kernel**: Treats traded probability p_t as a Q-martingale, exposing belief volatility, jump intensity, and dependence as quotable risk factors
-2. **Calibration Pipeline**: Filters microstructure noise, separates diffusion from jumps via expectation-maximization, enforces risk-neutral drift
-3. **Derivative Layer**: Defines variance, correlation, corridor, and first-passage instruments — analogous to volatility products in options markets
-
-### Results
-- Reduces short-horizon belief-variance forecast error vs. diffusion-only baselines
-- Provides an "implied volatility" analogue for prediction markets
-- Works on both synthetic risk-neutral paths and real event data
-
-## Why It Matters
-If prediction markets are to scale to institutional levels, they need standardized pricing tools — just as options needed Black-Scholes. This paper provides that framework.
-
-## Implementability: 1/5
-Highly mathematical (stochastic calculus, EM algorithm). Best used as conceptual foundation for pricing models, not directly deployable.
-
-## Next Steps
-1. Study the jump-diffusion calibration methodology
-2. Implement simplified belief-volatility surface for our portfolio
-3. Use the framework for sizing positions based on belief volatility
+## Takeaway
+Prediction markets are maturing as an asset class. A unified pricing model would enable derivatives, hedging, and risk management products. Still early, but the direction is clear.
