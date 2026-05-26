@@ -1,19 +1,17 @@
-# Summary: The Anatomy of a Decentralized Prediction Market
+# Anatomy of a Decentralized Prediction Market — 1-Page TL;DR
 
-**arxiv.org/abs/2604.24366**
+## The Question
+What does Polymarket's order book microstructure actually look like?
 
-## One-Page TL;DR
+## Method
+Analyzed 30 billion order book events across 600 markets over 52 days.
 
-The most comprehensive microstructure analysis of Polymarket ever conducted, using 30B order-book events across 600 markets.
+## Key Results
+- **Longshot premium** exists, like traditional markets
+- **Liquidity is deep** — not just at top-of-book
+- **Sports vs crypto vs politics** have fundamentally different microstructure
+- **50ms median latency** to archive, but some data takes seconds
+- **1% median wash trading**, 22% extreme — manageable but real
 
-**8 Stylized Facts:**
-1. Longshot bias in spreads (worse odds = worse liquidity)
-2. Geometric depth grid (not just top-of-book)
-3. No block-clock effects
-4. Many makers but a few dominate
-5. Sports spreads > crypto spreads
-6. ~50ms median data delay
-7. 1-22% wash trading
-8. Effective spreads vary by category
-
-**For bot builders:** This paper gives you the empirical ground truth. Crypto markets offer the best liquidity. Expect 50ms+ data lag. Wash trading can inflate volume signals by up to 22%. These constraints should drive market selection, execution timing, and signal filtering decisions.
+## Takeaway
+Polymarket has evolved past simple retail gambling into a nuanced multi-category market with distinct microstructure per category. Strategies must be tuned per category, not one-size-fits-all.
