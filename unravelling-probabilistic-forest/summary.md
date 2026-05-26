@@ -1,25 +1,41 @@
-# Summary: Unravelling the Probabilistic Forest
+# Unravelling the Probabilistic Forest: Arbitrage in Prediction Markets
 
-## Research Question
-What conditions give rise to arbitrage on Polymarket? Does arbitrage actually occur? Has anyone exploited it?
+**Source:** https://arxiv.org/abs/2508.03474
+**Published:** August 2025 (LIPIcs AFT 2025)
 
-## Dataset
-- Polymarket on-chain order book data: April 2024 — April 2025
-- 86 million transactions, 17,218 conditions, 6,487,193 bettors
+## Summary
 
-## Methodology
-Used integer programming to detect arbitrage in condition sets. Heuristic reduction:
-1. **Timeliness filter:** Only consider markets resolved within similar timeframes
-2. **Topical similarity:** Group markets discussing related events
-3. **Combinatorial relationships:** Connected conditions through shared tokens
+The first large-scale analysis of arbitrage on Polymarket, analyzing **86 million transactions** across **17,218 conditions** from April 2024 to April 2025.
 
-## Key Results
-- 7,051 conditions with single-market arbitrage (41%)
-- $40M USD estimated realized profit from arb extraction
-- Combinatorial arb more common but smaller per-opportunity
-- Heuristic reduction is crucial: naive O(2^n) comparison is intractable for 17,218 conditions
+### Key Findings
 
-## Implications
-- Polymarket is far from efficient — $40M left on the table
-- The arb detection algorithm can be automated and deployed
-- Post-2026 dynamic fees may have reduced arb profitability
+**Two distinct forms of arbitrage:**
+
+1. **Market Rebalancing Arbitrage** (Intra-market): YES + NO < $1.00 within a single market
+   - Found in **7,051 conditions** (41% of all analyzed)
+   - $40M+ in arbitrage profits extracted during the study period
+
+2. **Combinatorial Arbitrage** (Inter-market): Inconsistencies across logically related markets
+   - Far less common — only **0.24% of total profits**
+   - 62% of LLM-detected dependencies fail to generate arbitrage profit
+   - Requires integer programming to detect at scale
+
+### Key Numbers
+- 86 million bets analyzed
+- $40M+ total arbitrage profits
+- 7,051 conditions had single-market arbitrage
+- 17,218 total conditions analyzed
+- Combinatorial arbitrage: tiny fraction of total profits
+
+### Methodology
+Used on-chain historical order book data + integer programming to detect and classify arbitrage patterns. The paper provides a formal framework for understanding when these opportunities exist and when traders actually execute them.
+
+### Implications
+- Single-market bundle arb is the dominant source of structured profits
+- Combinatorial arb is theoretically interesting but practically limited by shallow liquidity
+- Retail traders providing liquidity are the unwitting counterparties to these strategies
+
+## Next Steps
+1. Implement the integer programming framework from the paper for automated arb detection
+2. Focus on single-market bundle arbitrage as the highest-ROI strategy
+3. Monitor for combinatorial arb only in highly liquid, correlated markets
