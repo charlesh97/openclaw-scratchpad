@@ -1,93 +1,114 @@
 """
-Unravelling the Probabilistic Forest - Arbitrage Detection
+Unravelling the Probabilistic Forest — Arb Detection (Simplified)
 
-Reconstructed methodology from the paper for detecting
-Market Rebalancing and Combinatorial Arbitrage.
+Integer programming approach for detecting bundle and combinatorial arbitrage
+on Polymarket, based on the paper's methodology.
 """
 
+from typing import List, Tuple, Dict
 from dataclasses import dataclass
-from typing import List, Tuple
 import itertools
+import pulp  # Requires: pip install pulp
+
 
 @dataclass
-class MarketSnapshot:
-    market_id: str
-    yes_bid: float
-    yes_ask: float
-    no_bid: float
-    no_ask: float
-    event_category: str
+class Condition:
+    """A single condition (YES/NO pair) on Polymarket."""
+    condition_id: str
+    yes_best_ask: float  # Price to buy YES
+    no_best_ask: float   # Price to buy NO (or compute from bid)
 
-@dataclass
-class ArbOpportunity:
-    market_ids: List[str]
-    type: str  # "rebalancing" or "combinatorial"
-    guaranteed_profit: float
-    max_size: int
+
+class ArbitrageDetector:
+    """
+    Detects arbitrage opportunities using integer programming.
     
-class ProbabilisticForestArbDetector:
-    def __init__(self):
-        self.markets: List[MarketSnapshot] = []
+    Type 1: Bundle Arbitrage — YES + NO < 1.0 within a single condition
+    Type 2: Combinatorial Arbitrage — Across multiple conditions
     
-    def detect_market_rebalancing(self) -> List[ArbOpportunity]:
-        """Detect YES+NO < $1.00 within single markets."""
-        opportunities = []
-        for m in self.markets:
-            # Cost to buy both YES and NO
-            best_yes_price = m.yes_ask  # Must buy at ask
-            best_no_price = m.no_ask    # Must buy at ask  
-            total_cost = best_yes_price + best_no_price
+    Key insight from paper: Type 1 is far more common and profitable.
+    """
+    
+    def detect_bundle_arb(self, conditions: List[Condition]) -> List[Tuple[str, float]]:
+        """Find single-condition bundle arbitrage opportunities."""
+        results = []
+        for c in conditions:
+            total = c.yes_best_ask + c.no_best_ask
+            if total < 1.0:
+                profit = 1.0 - total
+                results.append((c.condition_id, profit))
+        return sorted(results, key=lambda x: x[1], reverse=True)
+    
+    def detect_combinatorial_arb_ip(self, conditions: List[Condition]) -> List[Dict]:
+        """
+        Detects combinatorial arbitrage using Integer Programming.
+        
+        Find portfolios of tokens (one from each condition) that sum to < 1.0
+        with mutually exclusive outcomes.
+        """
+        n = len(conditions)
+        
+        # Create LP problem
+        prob = pulp.LpProblem("CombinatorialArb", pulp.LpMinimize)
+        
+        # Variables: x_i = 1 if we buy YES on condition i, 0 if we buy NO
+        x = {i: pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(n)}
+        
+        # Cost: sum of (x_i * yes_price_i + (1-x_i) * no_price_i)
+        cost_terms = []
+        for i, c in enumerate(conditions):
+            cost_terms.append(x[i] * c.yes_best_ask + (1 - x[i]) * c.no_best_ask)
+        
+        total_cost = pulp.lpSum(cost_terms)
+        prob += total_cost  # Minimize cost
+        
+        # Constraint: cost < 1.0 - epsilon for guaranteed profit
+        prob += total_cost <= 0.99
+        
+        # Solve
+        prob.solve(pulp.PULP_CBC_CMD(msg=False))
+        
+        if pulp.value(prob.objective) and pulp.value(total_cost) < 1.0:
+            decision = {i: pulp.value(x[i]) for i in range(n)}
+            portfolio = []
+            for i, c in enumerate(conditions):
+                outcome = "YES" if decision[i] == 1 else "NO"
+                price = c.yes_best_ask if decision[i] == 1 else c.no_best_ask
+                portfolio.append({
+                    "condition_id": c.condition_id,
+                    "outcome": outcome,
+                    "price": price,
+                })
             
-            if total_cost < 0.98:  # At least 2% edge
-                max_shares = min(
-                    int(m.yes_ask * 1000),  # Limited by liquidity
-                    int(m.no_ask * 1000)
-                )
-                opportunities.append(ArbOpportunity(
-                    market_ids=[m.market_id],
-                    type="rebalancing",
-                    guaranteed_profit=(1.0 - total_cost) * max_shares,
-                    max_size=max_shares
-                ))
-        return sorted(opportunities, key=lambda x: -x.guaranteed_profit)
-    
-    def detect_combinatorial(self) -> List[ArbOpportunity]:
-        """
-        Detect mispricing across related markets.
-        E.g., "Will candidate A win?" and "Will candidate A win primary?"
-        are logically linked - P(A wins general) <= P(A wins primary).
-        """
-        opportunities = []
+            total = sum(p["price"] for p in portfolio)
+            return [{
+                "portfolio": portfolio,
+                "total_cost": total,
+                "profit": 1.0 - total,
+                "edge_pct": (1.0 - total) * 100,
+            }]
         
-        # Group markets by event category
-        for category, cat_markets in self._group_by_category():
-            # Check for price inconsistencies between related markets
-            for m1, m2 in itertools.combinations(cat_markets, 2):
-                if self._are_logically_linked(m1, m2):
-                    # P(event A) must be >= P(event A AND event B)
-                    p_m1 = (m1.yes_bid + m1.yes_ask) / 2
-                    p_m2 = (m2.yes_bid + m2.yes_ask) / 2
-                    
-                    # If P(A) < P(A and B), we have an arb
-                    if p_m1 < p_m2 * 0.95:  # 5% threshold
-                        profit = (p_m2 - p_m1) * 100  # Per 100 shares
-                        opportunities.append(ArbOpportunity(
-                            market_ids=[m1.market_id, m2.market_id],
-                            type="combinatorial",
-                            guaranteed_profit=profit,
-                            max_size=min(100, int(m1.yes_bid * 100))
-                        ))
-        
-        return sorted(opportunities, key=lambda x: -x.guaranteed_profit)
+        return []
+
+
+# Example usage
+if __name__ == "__main__":
+    detector = ArbitrageDetector()
     
-    def _are_logically_linked(self, m1: MarketSnapshot, m2: MarketSnapshot) -> bool:
-        """Check if two markets have logical dependency."""
-        # Simplified - in practice would use event metadata
-        return m1.event_category == m2.event_category
+    conditions = [
+        Condition("btc-15m-001", yes_best_ask=0.47, no_best_ask=0.40),
+        Condition("btc-15m-002", yes_best_ask=0.51, no_best_ask=0.48),
+        Condition("eth-15m-001", yes_best_ask=0.44, no_best_ask=0.42),
+    ]
     
-    def _group_by_category(self):
-        """Group markets by event category for combinatorial analysis."""
-        groups = {}
-        for m in self.markets:
-            groups.setdefault(m.event_category, []).append(m)
-        return groups.items()
+    # Type 1: Bundle arb
+    bundle_opportunities = detector.detect_bundle_arb(conditions)
+    print("=== Bundle Arbitrage Opportunities ===")
+    for cid, profit in bundle_opportunities:
+        print(f"  {cid}: ${profit:.4f} profit/share")
+    
+    # Type 2: Combinatorial arb
+    comb_opportunities = detector.detect_combinatorial_arb_ip(conditions)
+    print("\n=== Combinatorial Arbitrage Opportunities ===")
+    for opp in comb_opportunities:
+        print(f"  Cost: ${opp['total_cost']:.2f} → Profit: ${opp['profit']:.2f}")
