@@ -1,33 +1,52 @@
-# polybot — Polymarket Reverse-Engineering Toolkit
+# Polybot — Polymarket Strategy Reverse-Engineering Toolkit
 
-**Source:** https://github.com/ent0n29/polybot
-**Type:** Infrastructure / market intelligence
-**Recommendation:** MEDIUM
+**Source:** https://github.com/ent0n29/polybot  
+**Author:** ent0n29  
+**Language:** Java 21 (microservices) + Python (research)  
+**License:** MIT  
+**Status:** Active
 
 ## What It Does
 
-Open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit. Key components:
+An open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit. Polybot is a multi-service system designed to ingest all Polymarket market/user trade data, run strategy backtests, and score replication accuracy. It's the execution and data foundation for **AWARE** (trader intelligence, PSI indices, fund mirroring).
 
-1. **Market data infrastructure** — Real-time order book data access and processing
-2. **Strategy reverse-engineering** — Analyzes what strategies are active in the market by observing order flow patterns
-3. **Execution foundation** — Fast trade execution layer for Polymarket
-4. **AWARE product layer** — Powers the next-generation product: trader intelligence, PSI indices, fund mirroring, API/UI
+### Key Components
+
+- **Executor Service** — Automated execution (paper and live)
+- **Strategy Service** — Strategy runtime and market making
+- **Ingestor Service** — Market/user trade ingestion into ClickHouse
+- **Analytics Service** — Quantitative analysis and replication scoring
+- **Research Toolkit** — Python scripts for snapshot analysis, deep analysis, and replication metrics
+
+### Tech Stack
+- Java 21 Spring Boot microservices
+- ClickHouse (analytics database)
+- Redpanda (event streaming)
+- Grafana + Prometheus (monitoring)
+- Python 3.11+ (research scripts)
 
 ## Why It Matters
 
-Not a standalone trading bot — it's the **infrastructure layer** for building your own market intelligence system. If you want to build:
-- Custom signal generation from order flow
-- Strategy detection (what are other bots doing?)
-- Your own execution pipeline with full control
+- **Strategy reverse-engineering** — Unique capability to analyze what strategies top traders are using
+- **Research-grade infrastructure** — ClickHouse + Redpanda for fast analytics on millions of trades
+- **AWARE integration** — PSI (Polymarket Sentiment Index) and fund mirroring on roadmap
+- **Enterprise-grade** — Java microservices with proper monitoring, not a weekend Python script
 
-...this is the foundation to build on.
+## Risks
 
-## Implementability: 3/5
+- Heavy infrastructure requirements (ClickHouse, Redpanda, multiple microservices)
+- Java stack — different from our Python-focused toolchain
+- More of a research/analytics platform than a trading bot
+- Requires significant RAM for ClickHouse
 
-Infrastructure code, not a turnkey bot. Valuable if you want to build proprietary intelligence on top of Polymarket data flows. Lower immediate priority if you just want to run an arb bot today.
+## Implementability: 2/5
 
-**Next steps:**
-1. Explore the data APIs and order book access patterns
-2. Study the strategy reverse-engineering methodology
-3. Use as a reference for building your own market data pipeline
-4. Consider as the foundation for a proprietary signal layer later
+- Complex setup requiring Docker, Java 21, Maven, and ClickHouse
+- Better suited as an intelligence/research layer than as a trading engine
+- Worth integrating the research Python scripts into our workflow
+
+## Next Steps
+
+1. Review the research Python scripts for trade replication analysis
+2. Consider ClickHouse as our analytics backend if scale grows
+3. Monitor AWARE product layer for PSI indices
