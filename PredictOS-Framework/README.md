@@ -1,29 +1,27 @@
 # PredictOS Framework
 
-**Source:** [PredictionXBT/PredictOS](https://github.com/PredictionXBT/PredictOS)
-**Recommendation:** MEDIUM
+**Source:** https://github.com/PredictionXBT/PredictOS
 
 ## What It Does
 
-An all-in-one open-source framework for deploying custom AI agents and trading bots on prediction markets. Supports **Polymarket, Kalshi, and Jupiter** prediction markets.
+An open-source, AI-powered operating system for prediction markets. Provides a unified interface to analyze markets across platforms, delivering real-time AI insights.
 
-### Key Features
-- **Cross-platform support** — unified interface for all major prediction market platforms
-- **AI-powered analysis** — real-time AI insights for market opportunities
-- **Self-hosted** — your data never leaves your servers
-- **Custom strategy** — bring your own models and data sources
-- **Arbitrage detection** — paste any market URL, automatically finds same market on other platforms
+### Features
+- Cross-platform market analysis (Polymarket, Kalshi, Jupiter)
+- AI agent deployment framework
+- Arbitrage strategy support — paste any market URL, auto-compares across platforms
+- BYO data/models/strategies
+- Token-gated ($PREDICT) launchpad
 
-## Implementability: 3/5
+### Architecture
+- Fully self-hostable (privacy-focused)
+- Built on Next.js + Python backend
+- Supports custom AI model integration
 
-- Comprehensive but complex deployment
-- Requires Docker + Node.js infrastructure
-- Self-hosting is a pro for privacy but a con for operational overhead
+## Implementability: 4/5
 
-## Risks
-- Relatively new project, may have bugs
-- Requires significant setup time
-- May overlap with our existing bot architecture
+Well-documented, active development. The cross-platform arbitrage detection and AI agent framework are directly applicable. However, the tokenomics layer is unnecessary for our use case.
 
-## Next Steps
-Monitor project maturity; evaluate as potential infrastructure layer if we expand to multi-platform.
+## Recommendation: MEDIUM
+
+Strong reference architecture for our own framework. The cross-platform URL matching and AI agent deployment patterns are worth studying.
