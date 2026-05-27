@@ -1,36 +1,47 @@
-# Paradigm Market Maker (octavi42)
+# Paradigm Prediction Market Maker
 
-**Source:** [octavi42/prediction-market-maker](https://github.com/octavi42/prediction-market-maker)
-**Recommendation:** MEDIUM
+**Source:** https://github.com/octavi42/prediction-market-maker
 
 ## What It Does
 
-A market-making strategy that placed **#2 in Paradigm's Prediction Market Challenge** (April 2026). 110 strategy iterations in 8 hours.
+A market-making strategy that placed **#2 in Paradigm's Prediction Market Challenge** (April 9, 2026 hackathon). The competition tasked participants with building an automated market-making strategy for binary YES/NO prediction markets with a FIFO limit order book.
 
-### Key Insights
-- **Monopoly regime** (~60% of edge) — being the only maker on certain price levels
-- **Volatility-adjusted quote filtering** — when to quote and when to sit out
-- **Inventory management** — skew prevents catastrophic losses (removing it = -$7 swing)
-- **Sizing matters** — match expected retail order flow
+The strategy achieved a $41.09 mean edge per simulation across 110 iterations developed in 8 hours — just $1.23 behind the #1 entry.
 
-### Results
-| Metric | Value |
-|--------|-------|
-| Placement | #2 of all submissions |
-| Mean edge | $41.09 per simulation |
-| Strategy versions | 110 |
-| Dev time | 8 hours |
+## Why It Matters
+
+This is the closest open-source proxy to a production-grade market-making algorithm for Polymarket-style prediction markets. The repo is a complete case study covering:
+
+- **Mechanics of quoting** — how to price limit orders relative to true probability
+- **Adverse selection** — how the arbitrageur agent punishes bad quotes
+- **Inventory risk** — skew management prevents catastrophic losses
+- **Order sizing** — matching expected retail order flow
+
+### Key Discovery: The "Monopoly Regime"
+
+~60% of edge came from a single insight: when the true probability is near 0 or 1 (extreme beliefs), most other market participants are on one side of the book, creating a monopoly opportunity for the market maker on the other side. The remaining ~40% came from normal regime trading.
+
+## Risks
+
+- **Simulated environment only** — tested against stylized agents, not real Polymarket order books
+- **No real liquidity constraints** — the simulation had continuous replenishment
+- **No gas/fee model** — Polymarket's dynamic taker fees (introduced 2026) would erode margins
+- **No multi-market exposure** — single binary market only
 
 ## Implementability: 4/5
 
-- Python-based, clean implementation
-- Comprehensive case study of prediction market microstructure
-- Educational value is exceptional
+The strategy logic is straightforward to port to Polymarket's CLOB. Key components:
+- Probability estimation (use CLOB mid-price + external signals)
+- Volatility-adjusted quoting
+- Inventory skew management
+- Position sizing via Kelly Criterion
 
-## Risks
-- Challenge was simulated — real Polymarket may differ
-- Market making requires significant capital for quote flooding
-- Adverse selection risk in live markets
+Needs adaptation for multi-market, multi-wallet deployment.
 
 ## Next Steps
-Study the monopoly regime finding — this is the single most valuable insight from the challenge.
+
+1. Port the quoting logic to Polymarket's CLOB API in Python
+2. Replace the simulation's "true probability" with a composite signal (order book + external data)
+3. Add multi-market inventory management
+4. Backtest against historical order book data (see polymarket-microstructure research)
+5. Implement the "monopoly regime" detection as a standalone module
