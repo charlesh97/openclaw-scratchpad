@@ -1,70 +1,65 @@
 #!/usr/bin/env python3
 """
-Polymarket Official AI Agents Framework — Reference Implementation
-Demonstrates core CLI commands and trade script integration.
+Reference: Polymarket AI Agents Framework Setup
+Source: github.com/Polymarket/agents
+
+Basic setup and tool usage for the Polymarket Agents framework.
 """
-from typing import Optional
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+# Prerequisites
+# pip install polymarket-agents
 
-# === CLI Commands (as run from the repo root) ===
-#
-# List top markets by volume:
-#   python scripts/python/cli.py get-all-markets --limit 10 --sort-by volume
-#
-# Get market details:
-#   python scripts/python/cli.py get-market --condition-id "0x..."
-#
-# Execute a trade:
-#   python agents/application/trade.py
+from polymarket_agents import PolymarketMCP
 
-# === Core Connector Usage (Python API) ===
+"""
+Key tools available (45+ total):
 
-class PolymarketAgentDemo:
-    """
-    Demonstration of Polymarket Agents framework connectors.
-    Illustrates how to compose Gamma market data + AI execution.
-    """
+Market Data:
+- get_markets: List/filter active markets
+- get_order_book: Fetch current order book
+- get_market_details: Market metadata and resolution info
 
-    def __init__(self, private_key: Optional[str] = None):
-        self.private_key = private_key or os.getenv("POLYGON_WALLET_PRIVATE_KEY")
-        # In full implementation, initialize:
-        # self.gamma = GammaMarketClient()
-        # self.polymarket = PolymarketAPI(private_key=self.private_key)
-        pass
+Trading:
+- create_order: Place limit/market orders
+- cancel_order: Cancel existing orders
+- get_orders: List active orders
 
-    def analyze_market(self, condition_id: str) -> dict:
-        """
-        Fetch market data and return analysis.
-        In production, this would use Gamma API + LLM.
-        """
-        # market = self.gamma.get_market(condition_id)
-        # Use LLM to analyze news, order book, etc.
-        return {"condition_id": condition_id, "status": "analysis_ready"}
+Portfolio:
+- get_balance: Account token balances
+- get_positions: Current open positions
+- get_trade_history: Past trade logs
 
-    def should_trade(self, analysis: dict) -> bool:
-        """Decision logic — in production, use AI model output."""
-        return True
+Analysis:
+- get_price_history: Historical price data
+- get_volume_stats: Volume analytics
+- get_trader_rankings: Top trader data
+"""
 
-    def execute(self, condition_id: str, side: str, size: float, price: float) -> dict:
-        """
-        Place an order on the Polymarket CLOB.
-        The python-order-utils library handles EIP-712 signing.
-        """
-        # order = self.polymarket.build_order(
-        #     condition_id=condition_id,
-        #     side=side,  # BUY or SELL
-        #     size=size,
-        #     price=price
-        # )
-        # signed_order = self.polymarket.sign_order(order)
-        # response = self.polymarket.place_order(signed_order)
-        return {"status": "dry_run", "side": side, "size": size, "price": price}
-
+def example_arb_strategy(mcp: PolymarketMCP):
+    """Simple arbitrage scanner using the MCP tools."""
+    # Get all active markets
+    markets = mcp.get_markets(
+        status="active",
+        limit=100,
+        closed_only=False
+    )
+    
+    for market in markets:
+        # Fetch order book
+        book = mcp.get_order_book(condition_id=market['condition_id'])
+        
+        # Check for bundle arbitrage (YES + NO < $1)
+        yes_ask = book['yes']['best_ask']
+        no_ask = book['no']['best_ask']
+        
+        if yes_ask + no_ask < 0.98:
+            print(f"Arbitrage: {market['title']}")
+            print(f"  YES @ {yes_ask}, NO @ {no_ask}")
+            print(f"  Edge: {(1.0 - yes_ask - no_ask) * 100:.2f}%")
 
 if __name__ == "__main__":
-    bot = PolymarketAgentDemo()
-    print("Polymarket AI Agent Demo initialized")
-    print("Run 'python scripts/python/cli.py get-all-markets --limit 5' for interactive mode")
+    print("Polymarket AI Agents Framework")
+    print("=" * 40)
+    print("45+ tools available for autonomous trading")
+    print("MCP Server: Enable Claude/other AI to trade directly")
+    print("Official SDK — recommended foundation layer")
