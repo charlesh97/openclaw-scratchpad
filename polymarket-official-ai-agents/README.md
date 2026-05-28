@@ -1,57 +1,43 @@
 # Polymarket Official AI Agents Framework
 
-**Source:** https://github.com/Polymarket/agents
-**Recommendation:** YES — **TOP 2 for today's email**
+**Source:** [github.com/Polymarket/agents](https://github.com/Polymarket/agents)
 
 ## What It Does
 
-The official Polymarket AI Agents framework provides a developer toolkit and set of utilities for building AI agents that trade autonomously on Polymarket. It's the **official, first-party** framework from Polymarket itself — not a third-party project.
+Polymarket's official developer framework and utility library for building **AI agents that trade autonomously** on Polymarket. Provides the official API infrastructure for agent-based trading strategies.
 
-### Key Features
+## Key Features
 
-- **Polymarket API Integration**: First-class connectors to Polymarket's Gamma API, CLOB API, and data feeds
-- **LLM-Powered Trading**: Built-in utilities for connecting AI models (OpenAI, Claude) to market analysis and trade execution
-- **RAG (Retrieval-Augmented Generation)**: ChromaDB-based vector storage for news, market data, and custom datasets
-- **CLI Interface**: `python cli.py` commands for get-all-markets, trade, analyze, and more
-- **Modular Architecture**: Separate connectors for market data (Gamma), order execution (Polymarket), and data objects (Pydantic models)
-- **MIT Licensed**: Free and open source
-
-### Architecture
-
-```
-polymarket-agents/
-├── agents/application/trade.py    # Main trading application
-├── scripts/python/cli.py          # CLI interface
-├── connectors/
-│   ├── chroma.py                  # Vector DB for RAG
-│   ├── gamma.py                   # Market metadata client
-│   └── polymarket.py              # Order execution + market data
-├── objects.py                     # Pydantic data models
-└── requirements.txt               # Python dependencies
-```
+- **MCP Server integration** — Model Context Protocol server enabling AI agents (Claude, etc.) to interact with Polymarket
+- **45+ tools** for market data, order management, portfolio tracking, and strategy execution
+- **Real-time monitoring** with enterprise-grade safety features
+- **Official SDK** — maintained by Polymarket team, ensuring API compatibility
+- **Autonomous trading** — agents can discover markets, evaluate probabilities, and execute trades without human intervention
 
 ## Why It Matters
 
-This is not just another bot — it's the **official reference implementation** from the Polymarket team for AI-powered trading. Any serious prediction market automation effort should start by understanding this framework. It sets the standard for:
+This is the **official first-party framework** from Polymarket. It guarantees:
+- Longest API compatibility window
+- Access to new Polymarket features first
+- Best documentation and community support
+- Direct integration with Polymarket's order book, CTF, and data APIs
 
-- How to authenticate and sign orders on the CLOB
-- How to fetch and parse market metadata
-- How to structure AI agent interactions with market data
+For bot development, this is the infrastructure layer — not a strategy itself, but the foundation any strategy gets built on.
 
 ## Risks
 
-- Requires Python 3.9 (somewhat dated)
-- Documentation is developer-focused with limited usage examples
-- The CLI interface is functional but not a polished trading UI
-- MIT license means no warranty for financial trading use
+- Framework is in active development (may have breaking changes)
+- Relies on Polymarket's API infrastructure (rate limits, downtime)
+- No built-in trading strategies — you provide your own
+- AI agent integration adds latency vs. direct API calls
 
-## Implementability: 5/5
+## Implementability: 4/5
 
-Production-ready official framework with complete CLI + Python API. Clone, configure `.env`, and start trading.
+Production-ready framework. The MCP integration is particularly valuable for AI-driven strategy research and rapid prototyping.
 
 ## Next Steps
 
-1. Clone and run the CLI to explore markets
-2. Build custom AI agents using the connector architecture
-3. Integrate with our existing strategy modules
-4. Extend with custom RAG data sources for domain-specific insights
+1. Set up MCP server with Claude for interactive strategy development
+2. Build a prototype agent that executes one of our existing strategies
+3. Test latency vs. direct CLOB API calls
+4. Evaluate the 45 tools for arbitrage-specific use cases
