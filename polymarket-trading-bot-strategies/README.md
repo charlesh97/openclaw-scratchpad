@@ -1,50 +1,33 @@
 # Polymarket Trading Bot Strategies (PolyHFT)
 
-**Source:** https://github.com/Anmoldureha/polymarket-trading-bot-strategies  
-**Author:** Anmoldureha  
-**Language:** Python  
-**License:** MIT  
-**Status:** Active
+**Source:** https://github.com/Anmoldureha/polymarket-trading-bot-strategies
+**Recommendation:** MEDIUM (strong, but already many similar bots exist)
+**Implementability:** 4/5
+**Last updated:** ~May 2026
 
-## What It Does
+## What it does
 
-A comprehensive algorithmic trading bot implementing **10 distinct trading strategies** for Polymarket. Covers the full spectrum of prediction market trading approaches:
+A comprehensive algorithmic trading bot with **10 distinct trading strategies** including hedging, micro-spreads, liquidity provision, single-market arbitrage, low-volume opportunities, spread scalping, tail-end trading, combinatorial arbitrage, legged arbitrage, and continuous market-making.
 
-1. **Hedging** — Offset positions across correlated markets
-2. **Micro-Spreads** — Capture tiny bid-ask spreads at high frequency
-3. **Liquidity Provision** — Earn spread by providing limit orders
-4. **Single-Market Arbitrage** — YES+NO bundle detection
-5. **Low-Volume Opportunities** — Exploit illiquid market mispricings
-6. **Spread Scalping** — Quick in-and-out on spread movements
-7. **Tail-End Trading** — Long-shot deviation betting
-8. **Combinatorial Arbitrage** — Cross-condition dependency detection
-9. **Legged Arbitrage** — Multi-leg synthetic positions
-10. **Continuous Market-Making [BETA]** — Persistent two-sided quoting
+### Key features:
+- **10 strategies** running simultaneously with independent risk controls
+- **Cross-exchange hedging** with Hyperliquid
+- **YAML-based configuration** for easy strategy tuning
+- **State persistence** — auto-saves and restores state on restart
+- **Telegram notifications** for trade alerts
+- **Paper trading mode** for safe testing
 
-## Why It Matters
+## Why it matters
 
-- **Most comprehensive single repo** — Covers almost every known Polymarket strategy
-- **Enterprise risk management** — Multi-layered risk controls with position limits, stop-losses, drawdown protection
-- **Paper trading mode** — Safe simulation before real capital
-- **Telegram notifications** — Real-time trade alerts
-- **Parallel market fetching** — Optimized for speed
+The breadth of strategies is impressive — particularly the combinatorial arbitrage detection and cross-exchange hedging with Hyperliquid. Good reference for strategy diversity.
 
 ## Risks
 
-- Breadth over depth — each strategy may need individual tuning
-- Some strategies cannibalize each other (e.g., MM vs arb)
-- Beta strategies may be unproven
-- High strategy count = high maintenance surface
-
-## Implementability: 3/5
-
-- Well-structured Python codebase
-- Comprehensive but complex configuration
-- Best used as a strategy library — pick specific strategies, not all 10
-- Heavy API usage may hit rate limits
+- Strategy count may cause resource contention
+- Documentation is extensive but some strategies are labeled BETA
+- Hyperliquid integration adds dependency risk
 
 ## Next Steps
-
-1. Extract specific strategies of interest (combinatorial arb, micro-spreads)
-2. Test in paper trading mode
-3. Validate strategy independence and interaction effects
+1. Test the 5 core strategies in paper trading
+2. Focus on combinatorial arbitrage strategy (most differentiated)
+3. Evaluate cross-exchange hedging utility
