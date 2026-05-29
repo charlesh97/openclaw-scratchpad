@@ -1,29 +1,30 @@
-# Polybot — Enterprise Polymarket Trading Infrastructure
+# Polybot — Strategy Reverse-Engineering Toolkit
 
 **Source:** https://github.com/ent0n29/polybot
-**Recommendation:** MEDIUM — professional architecture but heavy Java microservice setup
+**Recommendation:** MEDIUM
+**Implementability:** 3/5
+**Last updated:** ~2026
 
 ## What it does
 
-Polybot is a **multi-service Java microservice system** for professional Polymarket trading:
+Open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit. Focuses on understanding what profitable traders are doing by analyzing on-chain data and order flow.
 
-- **Executor Service**: Order execution, paper/live modes, settlement
-- **Strategy Service**: Strategy runtime and market making
-- **Ingestor Service**: Market/user trade ingestion into ClickHouse
-- **Analytics Service**: Quantitative analysis and replication scoring
+### Key features:
+- Market data crawler for backtesting
+- Trader intelligence (PSI indices)
+- Fund mirroring capabilities
+- API and UI layers
 
-Built with ClickHouse + Redpanda event pipeline, Grafana monitoring, Prometheus metrics.
+## Why it matters
 
-### Key Feature: Complete-Set Arbitrage
-Includes a built-in "complete-set arbitrage" strategy for Polymarket Up/Down binaries — buys YES + NO when sum < $1.
+The reverse-engineering approach is unique — instead of building strategies from first principles, it extracts signals from successful traders' patterns. The foundation for AWARE (trader intelligence product layer).
 
-### AWARE Layer
-Polybot is the foundation for AWARE (trader intelligence, PSI indices, fund mirroring, API/UI) — suggesting a roadmap to retail-facing products.
-
-## Implementability: 2/5
-Requires Java 21, Maven, Docker, ClickHouse, Redpanda/Kafka. Heavy infrastructure. Best suited for teams, not single traders.
+## Risks
+- Alpha decays as more people mirror same traders
+- Requires significant infrastructure (Rust + databases)
+- Strategy quality depends on trader selection
 
 ## Next Steps
-1. Reference the arbitrage detection algorithm in research/ directory
-2. Extract the ClickHouse query patterns for trade analysis
-3. Monitor the AWARE repo for user-friendly interfaces
+1. Crawl historical data for backtest corpus
+2. Identify top-performing wallets to mirror
+3. Build trader scoring model
