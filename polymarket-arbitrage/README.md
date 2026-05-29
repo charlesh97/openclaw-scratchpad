@@ -1,25 +1,32 @@
-# Polymarket Arbitrage Bot — Cross-Platform (10,000+ Markets)
+# Polymarket & Kalshi Cross-Platform Arbitrage Bot
 
 **Source:** https://github.com/ImMike/polymarket-arbitrage
-**Recommendation:** MEDIUM — good cross-platform arb detection, but real arb is rare
+**Recommendation:** MEDIUM
+**Implementability:** 5/5
+**Last updated:** ~2026
 
 ## What it does
 
-A Python-based arbitrage bot that scans **5,000+ Polymarket and Kalshi markets** looking for price inefficiencies. Supports three detection modes:
+A Python bot that scans 5,000+ live Polymarket markets and detects arbitrage opportunities across Polymarket and Kalshi. Includes bundle arbitrage detection (YES+NO ≠ $1.00) and market making strategies.
 
-1. **Cross-Platform Arbitrage**: Detects price differences between Polymarket and Kalshi for identical predictions
-2. **Bundle Arbitrage**: YES + NO prices that don't sum to ~$1.00
-3. **Market Making**: Captures spreads via competitive bid/ask orders
+### Key features:
+- Cross-platform arbitrage (Polymarket ↔ Kalshi)
+- Bundle arbitrage detection (YES + NO price ≠ $1.00)
+- Market making (bid/ask spread capture)
+- Live dashboard at localhost:8000
+- 99.6% win rate in simulation mode
+- Market Matching AI using text similarity
 
-Includes a live web dashboard, dual data modes (real/simulation), and market matching AI using text similarity.
+## Why it matters
 
-## Key Finding
-99.6% win rate in simulation ($573 profit) — but real markets are highly efficient. The bot acknowledges this honestly.
+Clean, well-documented Python implementation. The cross-platform arb between Polymarket and Kalshi is especially relevant as these are the two largest prediction markets. The Market Matching AI for cross-platform pair identification is clever.
 
-## Implementability: 4/5
-Clean Python architecture, well-documented YAML config, dashboard included.
+## Risks
+- Real markets are highly efficient — arb opportunities are rare
+- Simulation win rate (99.6%) is misleading for live trading
+- Kalshi API may have rate limits
 
 ## Next Steps
-1. Run in simulation mode to understand arb patterns
-2. Identify which market categories show the most persistent inefficiencies
-3. Deploy with conservative capital in sports markets during live events
+1. Run in simulation mode to understand strategy mechanics
+2. Connect real API keys for both platforms
+3. Focus on bundle arbitrage on Polymarket alone first (simpler)
