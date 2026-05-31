@@ -1,16 +1,20 @@
-# Arbitrage in Prediction Markets — 1-Page TL;DR
+# Summary: Unravelling the Probabilistic Forest
 
-## The Question
-How much arbitrage exists on Polymarket, and what types?
+**Authors:** Oriol Saguillo et al.
+**Published:** August 2025
+**arXiv:** 2508.03474
 
-## Method
-Analyzed 86M on-chain transactions across 17,218 conditions (Apr 2024 — Apr 2025). Used integer programming to detect two types of arbitrage.
+## TL;DR
+Two types of arbitrage exist on Polymarket: (1) Market Rebalancing — buying YES+NO when they sum < $1, and (2) Combinatorial Arb — exploiting price inconsistencies across logically linked markets. Both are detectable and exploitable systematically.
 
-## Key Results
-- **$40M+ extracted** by arbitrageurs in one year
-- **7,051 conditions** had single-market (rebalancing) arb
-- **Combinatorial arb** exists across related markets but is harder to capture
-- Median market price deviates ~40% from fair value ($0.60 out of $1.00)
+## Data
+- On-chain order book data from Polymarket
+- Multiple event categories (sports, politics, crypto)
 
-## Takeaway
-Arbitrage is real, persistent, and quantifiable on Polymarket. Single-market arb is low-hanging fruit; combinatorial arb offers higher margins per trade but requires condition-dependency mapping.
+## Key Numbers
+- Market Rebalancing arb occurs regularly across thousands of markets
+- Combinatorial arb requires solving a constraint graph across related conditions
+- Arb windows typically persist for minutes, not hours
+
+## Relevance to Vega Research
+High. This is the closest academic paper to our arb bot project. The combinatorial arb framework is directly implementable and complements the cross-exchange arb from the Kalshi bot.
