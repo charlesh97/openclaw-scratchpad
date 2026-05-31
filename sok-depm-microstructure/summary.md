@@ -1,16 +1,11 @@
 # Summary: SoK — Market Microstructure for DePMs
 
-## Scope
-Survey of decentralized prediction market microstructure as a methodological domain. Framing of open questions across venues without tick-level data.
+**Authors:** Multiple
+**Published:** October 2025
+**arXiv:** 2510.15612
 
-## Key Contributions
-1. Formal taxonomy of DePM architectures
-2. Information aggregation theory applied to prediction markets
-3. Open research questions mapped by venue type
-4. Bridging traditional market microstructure to DePM context
+## TL;DR
+Comprehensive survey of decentralized prediction market microstructure theory. Frames the landscape of mechanisms (AMM vs order book, conditional tokens, LMSR) and open research questions.
 
-## Open Questions Identified
-- How does CLOB vs. AMM architecture affect information aggregation speed?
-- Do prediction markets efficiently aggregate "thin" information (non-election events)?
-- What is the optimal fee structure for DePM liquidity provision?
-- How do cross-venue arbitrageurs affect DePM price discovery?
+## Relevance to Vega Research
+Provides the vocabulary and theoretical models needed to understand Polymarket's design choices. Important for understanding why certain arb patterns exist — they're structural features of the market design, not bugs.
