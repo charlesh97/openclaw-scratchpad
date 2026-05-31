@@ -1,40 +1,32 @@
 # Unravelling the Probabilistic Forest: Arbitrage in Prediction Markets
 
-**Source:** https://arxiv.org/abs/2508.03474  
-**Authors:** Oriol Saguillo, Vajiheh Ghafouri, Lucianna Kiffer, Guillermo Suarez-Tangil (IMDEA Networks Institute)  
-**Published:** August 2025 (revised May 2026)  
-**Type:** Academic paper (AFT 2025)
+**Source:** https://arxiv.org/abs/2508.03474
 
-## Summary
+## What it does
+This paper presents the first large-scale empirical analysis of arbitrage on Polymarket. It identifies and characterizes **two distinct forms of arbitrage**:
 
-This paper presents the **first large-scale empirical analysis of arbitrage on Polymarket**, analyzing 86 million transactions across 17,218 conditions from April 2024 to April 2025. It identifies and measures two distinct forms of arbitrage:
+1. **Market Rebalancing Arbitrage** — Occurs within a single market (e.g., YES + NO prices < $1.00). The classic "risk-free" arb where you buy both sides for < $1 and collect the difference at settlement.
 
-1. **Market Rebalancing Arbitrage** (intra-market) — When YES + NO prices don't sum to $1.00 within a single market
-2. **Combinatorial Arbitrage** (inter-market) — Arbitrage spanning multiple logically related markets
+2. **Combinatorial Arbitrage** — Spans logically related markets. Example: if "Candidate X wins Party A primary" and "Candidate X wins general election" are priced inconsistently with the joint probability constraints, an arb exists across both markets.
 
-### Key Findings
+Uses on-chain historical order book data to measure when these opportunities existed and whether they were exploited.
 
-- **7,051 conditions** had single-market arbitrage opportunities
-- **~$40 million in total arbitrage profits** extracted over the study period
-- Combinatorial arbitrage is rarer but larger per-opportunity
-- Arbitrage persists due to slow human reaction times and fragmented liquidity
-- Uses integer programming to detect combinatorial dependencies
+## Why it matters
+- **Directly relevant to our arb bot strategy** — this paper gives us the mathematical framework for detecting combinatorial arb.
+- **Quantifies real opportunity sizes** — tells us what spreads actually existed, for how long, and at what volume.
+- **Validates the approach** — proves that systematic arb in prediction markets is both detectable and profitable.
 
-## Why It Matters
+## Key Findings
+- Both arb types exist persistently across Polymarket markets
+- Combinatorial arb opportunities are more complex to detect but can have larger theoretical edge
+- Most arb opportunities decay within minutes as bots and market participants compete
+- Market Rebalancing arb (YES+NO < $1) is the most accessible for automated detection
 
-- Empirically confirms that arbitrage exists at scale on Polymarket
-- Quantifies total extractable value (~$40M/year)
-- Provides a mathematical framework for detecting combinatorial arbitrage
-- Directly applicable to building automated arbitrage strategies
-
-## Implementability: 4/5
-
-- The integer programming framework can be translated to Python
-- Single-market arb detection is straightforward (YES+NO != $1)
-- Combinatorial arb requires mapping condition dependencies
-- Paper's methodology can guide implementation
+## Implementability: 3/5
+The paper provides the theoretical framework but no code. The combinatorial arb detection requires building a graph of logically related markets and solving constraint satisfaction problems. Significant engineering effort.
 
 ## Next Steps
-1. Translate the integer programming arb detection into our codebase
-2. Implement single-market arb scanner first (lowest hanging fruit)
-3. Build condition dependency graph for combinatorial detection
+1. Implement Market Rebalancing arb detection (simpler, immediate payoff)
+2. Build a graph of Polymarket events and their logical dependencies
+3. Implement combinatorial arb constraint solver (integer programming)
+4. Backtest against historical order book data
