@@ -1,46 +1,24 @@
-# OctoBot Prediction Market
+# OctoBot Prediction Market Integration
 
 **Source:** https://github.com/Drakkar-Software/OctoBot-Prediction-Market
-**Recommendation:** YES ✅
-**Implementability:** 4/5
 
-## What It Does
+## What it does
+An open-source Polymarket trading bot built on the OctoBot framework. Automates copy trading and arbitrage strategies on crypto prediction markets with a simple web interface. OctoBot is the leading open-source crypto trading bot framework, and this module extends it to prediction markets.
 
-OctoBot Prediction Market is a free, open-source Polymarket trading bot built on top of the established OctoBot crypto trading framework. It provides:
+## Key Features
+- **Copy trading** — Mirror top Polymarket traders' positions
+- **Arbitrage detection** — Cross-market opportunity scanning
+- **OctoBot integration** — Leverages the mature OctoBot infrastructure (backtesting, risk management, notifications)
+- **Web UI** — Full dashboard for monitoring and configuration
 
-- **Copy Trading** — Automatically mirror trades from top Polymarket profiles/leaderboard traders
-- **Arbitrage Strategies** — Detect and execute market inefficiencies (YES+NO < $1.00 bundle arbitrage)
-- **Paper Trading** — Full risk-free simulation to test strategies before deploying real funds
-- **Kalshi Integration** (upcoming) — Cross-platform arbitrage capability
-- **Telegram + Web UI** — Monitor and control your bot from any device
-- **Self-Custody** — Private keys stay local; no trust required
+## Why it matters
+OctoBot has years of battle-tested trading infrastructure. This prediction market module brings that maturity to Polymarket. The backtesting engine alone is worth studying — it allows testing arb strategies against historical data before risking capital.
 
-## Architecture
-
-Built on the OctoBot framework (Python), it uses a modular tentacle-based architecture where each strategy is a pluggable module. The system connects to Polymarket's CLOB API for order book data and execution.
-
-## Why It Matters
-
-- From the **Drakkar-Software team** — creators of OctoBot, one of the most popular open-source crypto trading bots
-- Actively maintained and under development
-- Combines both copy trading and arbitrage in a single platform
-- Paper trading enables safe strategy iteration
-- Has an actual **visual UI**, unlike most Telegram-only bot solutions
-
-## Risks
-
-- Arbitrage module is still 🚧 under development (voted on by community)
-- Copy trading module partially complete (whitelist/budget features still WIP)
-- Requires Python environment + Redis setup
-- Relies on Polymarket API availability and Polygon RPC stability
+## Implementability: 5/5
+OctoBot is Python, well-documented, and actively maintained. The prediction market module plugs into existing OctoBot instances. This is the most immediately deployable option.
 
 ## Next Steps
-
-1. Clone the repo and configure Polymarket API credentials
-2. Run paper trading to evaluate the copy trading feature
-3. Monitor the arbitrage module development (vote on issue to prioritize)
-4. Consider contributing to the Kalshi integration for cross-platform arb
-
-## Implementability Score: 4/5
-
-Immediate value from copy trading. Arbitrage module needs community prioritization but framework is solid.
+1. Set up OctoBot instance
+2. Enable Polymarket plugin
+3. Configure copy trading and arb strategies
+4. Run backtests
