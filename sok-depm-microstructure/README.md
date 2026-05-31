@@ -1,23 +1,23 @@
 # SoK: Market Microstructure for Decentralized Prediction Markets (DePMs)
 
-**Source:** arXiv:2510.15612 — https://arxiv.org/abs/2510.15612
-**Published:** October 2025
+**Source:** https://arxiv.org/abs/2510.15612
 
-## Key Findings
-Comprehensive systematization of knowledge (SoK) framing the open questions in decentralized prediction market microstructure. Covers:
-- Taxonomy of DePM architectures (CLOB, AMM, hybrid)
-- Liquidity dynamics across venues
-- Arbitrage and market efficiency measurement
-- Information aggregation theory applied to DePMs
-- Open research questions in the field
+## What it does
+A Systematization of Knowledge (SoK) paper that surveys decentralized prediction market microstructure as a methodological domain. Frames the open questions across venues and provides the theoretical foundation for empirical microstructure research.
 
-## Why It Matters
-Provides the theoretical framework for understanding where and how to deploy trading bots. The taxonomy of DePM architectures helps identify which strategies work on which platforms.
+## Key Areas Covered
+- **Outcome share structures** — Three categories and two variants
+- **Market mechanism design** — Automated market makers vs order books
+- **Liquidity dynamics** — How liquidity forms and decays
+- **Information aggregation** — How prices reflect beliefs
+- **Open research questions** — What's not yet understood
 
-## Implementability: 3/5
-Survey paper — no implementation. But essential for building a research-informed strategy. The open questions section identifies exactly which market inefficiencies remain unexploited.
+## Why it matters
+Provides the theoretical foundation for understanding how prediction markets work at a structural level. Essential background reading before building serious trading infrastructure.
+
+## Implementability: 2/5
+Pure survey/research paper. No code. But invaluable for understanding why markets behave the way they do.
 
 ## Next Steps
-1. Use the taxonomy to map Polymarket's CLOB architecture vs. Kalshi's
-2. Target open questions for novel bot strategies
-3. Reference framework for backtest methodology
+1. Read for theoretical grounding
+2. Reference the open questions section for novel research directions
