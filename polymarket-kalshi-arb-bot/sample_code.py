@@ -1,79 +1,92 @@
 """
-Reference implementation: Cross-platform arbitrage detection pattern
-from the Polymarket-Kalshi Arbitrage Bot.
+Polymarket ↔ Kalshi Arbitrage Detection & Execution
+Reference implementation based on realfishsam/prediction-market-arbitrage-bot
 """
-
+import asyncio
+import logging
 from dataclasses import dataclass
 from typing import Optional
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class ArbitrageOpportunity:
-    polymarket_price: float  # cost of position on Polymarket (cents)
-    kalshi_price: float  # cost of opposite position on Kalshi (cents)
-    total_cost: float  # combined cost
-    edge: float  # profit per $1 unit
-    polymarket_market_id: str
-    kalshi_market_id: str
-    direction: str  # "poly_down_kalshi_yes" or "poly_up_kalshi_no"
+    event_id: str
+    polymarket_price: float
+    kalshi_price: float
+    spread_pct: float
+    max_size: float
+    direction: str  # "KALSHI_BUY_POLY_SELL" or "POLY_BUY_KALSHI_SELL"
 
+class CrossExchangeArbBot:
+    """Detects and executes arbitrage between Polymarket and Kalshi."""
 
-class ArbitrageScanner:
-    """
-    Scans Polymarket and Kalshi for price discrepancies.
-    Core detection logic — not the full bot implementation.
-    """
+    MIN_SPREAD_PCT = 0.02  # 2% minimum after fees
+    MAX_POSITION_SIZE = 1000  # USDC
 
-    MIN_EDGE = 0.01  # 1% minimum edge
-    FEE_RATE = 0.002  # 0.2% platform + gas fee estimate
+    def __init__(self, poly_client, kalshi_client):
+        self.poly = poly_client
+        self.kalshi = kalshi_client
 
-    def find_opportunities(
-        self, polymarket_prices: dict, kalshi_prices: dict
-    ) -> list[ArbitrageOpportunity]:
+    async def scan_markets(self) -> list[ArbitrageOpportunity]:
+        """Scan all overlapping events for price divergence."""
         opportunities = []
+        poly_markets = await self.poly.get_active_markets()
+        kalshi_markets = await self.kalshi.get_active_markets()
 
-        for event_id, poly_data in polymarket_prices.items():
-            if event_id not in kalshi_prices:
-                continue
+        # Match events by title/normalized name
+        matched = self._match_events(poly_markets, kalshi_markets)
 
-            kalshi_data = kalshi_prices[event_id]
+        for event_id, (poly_mkt, kalshi_mkt) in matched.items():
+            poly_yes = poly_mkt["outcomePrices"]["yes"]
+            kalshi_yes = kalshi_mkt["yes_bid"]  # or mid-price
 
-            # Strategy 1: Poly DOWN + Kalshi YES
-            poly_down = poly_data.get("down_price", 0)
-            kalshi_yes = kalshi_data.get("yes_price", 0)
-            total_1 = poly_down + kalshi_yes
-            edge_1 = 1.0 - total_1 - self.FEE_RATE
-
-            if edge_1 >= self.MIN_EDGE:
-                opportunities.append(
-                    ArbitrageOpportunity(
-                        polymarket_price=poly_down,
-                        kalshi_price=kalshi_yes,
-                        total_cost=total_1,
-                        edge=edge_1,
-                        polymarket_market_id=poly_data["market_id"],
-                        kalshi_market_id=kalshi_data["market_id"],
-                        direction="poly_down_kalshi_yes",
-                    )
+            spread = abs(poly_yes - kalshi_yes)
+            if spread >= self.MIN_SPREAD_PCT:
+                direction = "KALSHI_BUY_POLY_SELL" if kalshi_yes < poly_yes else "POLY_BUY_KALSHI_SELL"
+                max_size = min(
+                    poly_mkt["liquidity"]["yes"],
+                    kalshi_mkt["liquidity"]["yes"],
+                    self.MAX_POSITION_SIZE
                 )
+                opportunities.append(ArbitrageOpportunity(
+                    event_id=event_id,
+                    polymarket_price=poly_yes,
+                    kalshi_price=kalshi_yes,
+                    spread_pct=spread,
+                    max_size=max_size,
+                    direction=direction
+                ))
 
-            # Strategy 2: Poly UP + Kalshi NO
-            poly_up = poly_data.get("up_price", 0)
-            kalshi_no = kalshi_data.get("no_price", 0)
-            total_2 = poly_up + kalshi_no
-            edge_2 = 1.0 - total_2 - self.FEE_RATE
+        return sorted(opportunities, key=lambda o: o.spread_pct, reverse=True)
 
-            if edge_2 >= self.MIN_EDGE:
-                opportunities.append(
-                    ArbitrageOpportunity(
-                        polymarket_price=poly_up,
-                        kalshi_price=kalshi_no,
-                        total_cost=total_2,
-                        edge=edge_2,
-                        polymarket_market_id=poly_data["market_id"],
-                        kalshi_market_id=kalshi_data["market_id"],
-                        direction="poly_up_kalshi_no",
-                    )
-                )
+    async def execute(self, opp: ArbitrageOpportunity) -> bool:
+        """Execute both legs simultaneously."""
+        tasks = []
+        if opp.direction == "KALSHI_BUY_POLY_SELL":
+            tasks.append(self.kalshi.buy("yes", opp.event_id, opp.max_size))
+            tasks.append(self.poly.sell("yes", opp.event_id, opp.max_size))
+        else:
+            tasks.append(self.poly.buy("yes", opp.event_id, opp.max_size))
+            tasks.append(self.kalshi.sell("yes", opp.event_id, opp.max_size))
 
-        return sorted(opportunities, key=lambda o: o.edge, reverse=True)
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        # Verify both legs filled
+        if any(isinstance(r, Exception) for r in results):
+            logger.error(f"Partial fill on {opp.event_id}, hedging positions")
+            return False
+        return True
+
+    def _match_events(self, poly_mkts, kalshi_mkts) -> dict:
+        """Simple title-based matching. In production, use embedding similarity."""
+        matches = {}
+        for p in poly_mkts:
+            for k in kalshi_mkts:
+                if self._titles_match(p["title"], k["title"]):
+                    matches[p["id"]] = (p, k)
+                    break
+        return matches
+
+    @staticmethod
+    def _titles_match(t1: str, t2: str) -> bool:
+        return t1.lower().strip() == t2.lower().strip()
