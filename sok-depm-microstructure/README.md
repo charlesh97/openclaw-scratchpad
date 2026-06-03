@@ -1,23 +1,19 @@
 # SoK: Market Microstructure for Decentralized Prediction Markets (DePMs)
 
-**Source:** https://arxiv.org/abs/2510.15612
+**Source:** https://arxiv.org/abs/2510.15612 (October 2025)
 
-## What it does
-A Systematization of Knowledge (SoK) paper that surveys decentralized prediction market microstructure as a methodological domain. Frames the open questions across venues and provides the theoretical foundation for empirical microstructure research.
+## Summary
 
-## Key Areas Covered
-- **Outcome share structures** — Three categories and two variants
-- **Market mechanism design** — Automated market makers vs order books
-- **Liquidity dynamics** — How liquidity forms and decays
-- **Information aggregation** — How prices reflect beliefs
-- **Open research questions** — What's not yet understood
+A **Systematization of Knowledge** paper that surveys DePM microstructure as a methodological domain. Frames the open questions across venues.
 
-## Why it matters
-Provides the theoretical foundation for understanding how prediction markets work at a structural level. Essential background reading before building serious trading infrastructure.
+### Key Contributions
+1. Taxonomy of outcome share structures (3 categories + 2 variants)
+2. Maps the landscape of DePM design choices and their implications
+3. Identifies open research questions in prediction market microstructure
+4. Covers Polymarket, Kalshi, Azuro, and other platforms
 
-## Implementability: 2/5
-Pure survey/research paper. No code. But invaluable for understanding why markets behave the way they do.
+### Relevance to Our Bot
+Useful as a reference framework for understanding different prediction market designs. The outcome share taxonomy helps identify structurally different arbitrage opportunities across venues.
 
-## Next Steps
-1. Read for theoretical grounding
-2. Reference the open questions section for novel research directions
+## Implementability: 1/5
+Purely academic survey. Background reading for team members new to prediction markets.
