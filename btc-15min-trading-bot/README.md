@@ -1,39 +1,37 @@
-# BTC 15-Minute Prediction Market Trading Bot
+# BTC 15-Minute Trading Bot
 
 **Source:** https://github.com/aulekator/Polymarket-BTC-15-Minute-Trading-Bot
 
-## What it does
+## What It Does
 
-A production-grade algorithmic trading bot for Polymarket's 15-minute BTC price prediction markets. Features a 7-phase architecture combining multiple signal sources (technical analysis, on-chain data, sentiment), professional risk management, and self-learning capabilities.
+A production-grade algorithmic trading bot specifically for Polymarket's **15-minute BTC price prediction markets**. Built with a 7-phase architecture:
 
-## Architecture (7-Phase)
+1. **Ingestion** — Unify & validate data from Coinbase, Binance, News feeds, Solana
+2. **Nautilus Core** — Trading framework
+3. **Signal Processors** — Spike Detection, Sentiment Analysis, Price Divergence
+4. **Fusion Engine** — Weighted voting across signals
+5. **Risk Management** — $1 max per trade, 30% stop loss, 20% take profit
+6. **Execution** — Polymarket order routing
+7. **Self-Learning** — Automatic weight optimization based on performance
 
-1. **Data Ingestion:** Real-time BTC price feeds, order book data
-2. **Signal Generation:** Technical indicators + on-chain metrics
-3. **Probability Estimation:** ML model predicting short-term price direction
-4. **Position Sizing:** Kelly criterion-based allocation
-5. **Execution:** Smart order routing to minimize slippage
-6. **Risk Management:** Stop-loss, max drawdown limits
-7. **Self-Learning:** Performance tracking and strategy adaptation
-
-## Why it matters
-
-The 15-minute crypto markets are among the most liquid on Polymarket. This bot provides a complete, extensible framework specifically for these high-frequency binary markets. Multi-signal approach is more robust than single-signal strategies.
-
-## Implementability: 4/5
-
-Complete codebase but requires BTC price feed infrastructure and ML model training. The self-learning component is sophisticated.
+## Key Features
+- **Multi-signal intelligence** (spike, sentiment, divergence)
+- **Dual-mode** — toggle between simulation and live without restart
+- **Grafana dashboards** + Prometheus metrics
+- **WebSocket auto-reconnection** + rate limiting
+- **Paper trading** with full P&L tracking
 
 ## Risks
+- Narrow focus: only BTC 15-minute markets
+- Polymarket's new **dynamic taker fees** directly target this strategy type
+- Multi-signal latency may miss short windows
+- Self-learning adds complexity without proven edge
 
-- 15-minute markets resolve quickly — latency is critical
-- ML model needs regular retraining
-- Polymarket dynamic fees designed to reduce latency arb advantage
-- High competition from other bots
+## Implementability: 3/5
+
+Good documentation and architecture, but the narrow BTC 15-min focus and dynamic fee headwind reduce applicability. Architecture patterns (multi-signal fusion, risk framework) are worth extracting.
 
 ## Next Steps
-
-1. Set up BTC price feed (Binance WebSocket)
-2. Train initial probability model on historical data
-3. Enable dry-run mode for 2 weeks
-4. Calibrate position sizing to Polymarket's fee structure
+1. Test in simulation mode to evaluate signal quality
+2. Assess impact of Polymarket's dynamic fee structure
+3. Consider expanding architecture to multi-market
