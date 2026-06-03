@@ -1,25 +1,28 @@
 # Unravelling the Probabilistic Forest: Arbitrage in Prediction Markets
 
-**Source:** arXiv:2508.03474 — https://arxiv.org/abs/2508.03474
-**Authors:** Oriol Saguillo, Vazha Ghafouri, Lucianna Kiffer, Guillermo Suarez-Tangil (IMDEA Networks Institute)
-**Published:** August 2025 | **Conference:** AFT 2025
+**Source:** https://arxiv.org/abs/2508.03474 (August 2025)
 
-## Key Findings
-- **$40M+ profit extracted** from Polymarket arbitrage between April 2024 and April 2025
-- Analyzed **86 million transactions** across **17,218 conditions**
-- Two types of arbitrage discovered:
-  1. **Market Rebalancing Arbitrage** (intra-market): within a single condition
-  2. **Combinatorial Arbitrage** (inter-market): across multiple related markets
-- **7,051 conditions** had single-market arbitrage — 41% of all conditions
-- Used heuristic-driven reduction (timeliness, topical similarity, combinatorial relationships) to scale beyond O(2^n) analysis
+## Summary
 
-## Why It Matters
-This is the first large-scale empirical analysis of arbitrage on Polymarket. The $40M figure quantifies the opportunity. The combinatorial arb detection algorithm is the key deliverable — can be replicated and automated.
+The most comprehensive analysis of arbitrage on Polymarket to date. The researchers analyzed **86 million transactions** across the full Polymarket order book from April 2024 to April 2025.
 
-## Implementability: 4/5
-The combinatorial arb detection heuristic is implementable. The paper's algorithm for detecting mispriced condition sets can be turned into a real-time scanner. Main limitation: $40M was over 1 year — current opportunity may be lower as competition has increased.
+### Key Findings
 
-## Next Steps
-1. Implement the combinatorial arb detection algorithm
-2. Run on live Polymarket data
-3. Benchmark arb profitability before and after Polymarket's dynamic fee changes (2026)
+1. **$40 million in arbitrage profits extracted** during the study period
+2. **Two distinct arbitrage forms identified:**
+   - **Market Rebalancing Arbitrage** — within a single market or condition (YES + NO < $1.00)
+   - **Combinatorial Arbitrage** — spanning across multiple related markets
+3. **7,051 out of 17,218 conditions had single-market arbitrage** opportunities
+4. **Combinatorial arbitrage** is rarer but yields larger profits when found
+5. Used integer programming to detect arbitrage at scale across 17,218 conditions
+
+### Methodology
+- Heuristic-driven reduction strategy based on timeliness, topical similarity, and combinatorial structure
+- Overcame O(2^(n+m)) complexity through intelligent pruning
+- On-chain historical order book data
+
+### Relevance to Our Bot
+Directly quantifies the arbitrage opportunity space. The combinatorial arbitrage detection methodology is implementable as a scanner module. Establishes that arb profits existed at scale, though competition has increased dramatically since April 2025.
+
+## Implementability: 3/5
+The methodology is clear but requires significant data infrastructure. The combinatorial detection algorithm (integer programming over condition graphs) is the most valuable — could be built as a standalone scanner.
