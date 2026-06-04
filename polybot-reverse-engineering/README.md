@@ -1,24 +1,42 @@
-# Polybot — Polymarket Reverse Engineering Toolkit
+# PolyBot — Strategy Reverse-Engineering Toolkit
 
-**Source:** https://github.com/ent0n29/polybot
+**Source:** https://github.com/ent0n29/polybot  
+**Recommendation:** MEDIUM  
+**Language:** Java 21 microservices + ClickHouse + Redpanda  
 
-## What it does
-An open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit. Polybot provides the execution and market-data foundation for AWARE (the next product layer — trader intelligence, PSI indices, fund mirroring, API/UI).
+## What It Does
 
-## Key Capabilities
-- **Market data ingestion** — Real-time order book, trade, and liquidity feeds
-- **Strategy reverse-engineering** — Analyzes what profitable traders are doing
-- **Fund mirroring** — Automatically copies top-performing wallets
-- **PSI (Polymarket Sentiment Index)** — Proprietary sentiment metric
-- **Low-latency execution** — Optimized for speed
+An enterprise-grade open-source Polymarket trading infrastructure and strategy reverse-engineering toolkit. Polybot is a multi-service system for automated execution, strategy runtime, market-making, user trade ingestion into ClickHouse, and quantitative analysis/replication scoring.
 
-## Why it matters
-The reverse-engineering angle is unique. Instead of inventing strategies from scratch, polybot learns from existing profitable traders. This is a complementary approach to algorithmic discovery — let the market's best participants reveal the alpha, then systematize it.
+## Architecture (5 Microservices)
 
-## Implementability: 3/5
-Python + Web3 stack. The AWARE layer is still evolving. Strategy reverse-engineering requires ongoing analysis — it's more of a research tool than a turnkey bot.
+| Service | Port | Purpose |
+|---------|------|---------|
+| executor-service | 8080 | Order execution, paper sim, settlement |
+| strategy-service | 8081 | Strategy runtime and status |
+| analytics-service | 8082 | Analytics on ClickHouse data |
+| ingestor-service | 8083 | Market/user-trade ingestion pipelines |
+| infra-orchestrator | 8084 | Lifecycle of analytics + monitoring |
 
-## Next Steps
-1. Set up polybot for data ingestion
-2. Analyze top trader performance metrics
-3. Extract strategy patterns and systematize
+Infrastructure: ClickHouse, Redpanda Kafka, Grafana, Prometheus, Alertmanager
+
+## Why It Matters
+
+- **Reverse-engineering focus** — designed to replicate successful Polymarket strategies
+- **Industrial stack** — Java 21 + ClickHouse is serious infrastructure
+- **AWARE product layer** — future API/UI layer for trader intelligence
+- **Complete monitoring** — full observability stack
+
+## Risks
+
+- High infrastructure complexity (Docker, ClickHouse, Kafka, etc.)
+- Java microservices = heavy dev overhead vs Python
+- Research toolkit still in early development
+- Enterprise-grade for what may be retail-scale strategies
+- 5+ services to manage is overkill for most strategies
+
+## Implementability: 2/5
+
+Powerful but heavy. Only suitable if you need the full reverse-engineering pipeline. Overkill for simple arb.
+
+## Status: QUEUED
