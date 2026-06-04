@@ -1,28 +1,43 @@
 # Unravelling the Probabilistic Forest: Arbitrage in Prediction Markets
 
-**Source:** https://arxiv.org/abs/2508.03474 (August 2025)
+**Source:** https://arxiv.org/abs/2508.03474  
+**Recommendation:** YES ✅  
+**Published:** August 5, 2025  
 
 ## Summary
 
-The most comprehensive analysis of arbitrage on Polymarket to date. The researchers analyzed **86 million transactions** across the full Polymarket order book from April 2024 to April 2025.
+The most comprehensive analysis of arbitrage on Polymarket to date. Analyzed 86 million on-chain transactions (April 2024 – April 2025) and discovered $40 million in arbitrage profits extracted. Identifies two distinct forms of arbitrage: Market Rebalancing and Combinatorial.
 
-### Key Findings
+## Key Findings
 
-1. **$40 million in arbitrage profits extracted** during the study period
-2. **Two distinct arbitrage forms identified:**
-   - **Market Rebalancing Arbitrage** — within a single market or condition (YES + NO < $1.00)
-   - **Combinatorial Arbitrage** — spanning across multiple related markets
-3. **7,051 out of 17,218 conditions had single-market arbitrage** opportunities
-4. **Combinatorial arbitrage** is rarer but yields larger profits when found
-5. Used integer programming to detect arbitrage at scale across 17,218 conditions
+1. **Market Rebalancing Arbitrage** — within a single market when YES + NO < $1.00
+   - Found in 7,051 out of 17,218 conditions
+   - $40M total arbitrage profits captured
+   - Heavily bot-dominated by mid-2025
 
-### Methodology
-- Heuristic-driven reduction strategy based on timeliness, topical similarity, and combinatorial structure
-- Overcame O(2^(n+m)) complexity through intelligent pruning
-- On-chain historical order book data
+2. **Combinatorial Arbitrage** — across multiple logically dependent markets
+   - Much rarer — 0.24% of total profits
+   - Requires detecting dependencies between conditions (e.g., "BTC > $100K June" AND "BTC > $110K June")
+   - Most LLM-detected dependencies (62%) fail to produce profitable arb
 
-### Relevance to Our Bot
-Directly quantifies the arbitrage opportunity space. The combinatorial arbitrage detection methodology is implementable as a scanner module. Establishes that arb profits existed at scale, though competition has increased dramatically since April 2025.
+3. **Key Insight:** The median deviation of $0.60 means markets frequently deviate by 40% from efficiency — not close to efficient
+
+## Why It Matters
+
+- Most cited prediction market paper of 2025-2026
+- Provides the mathematical framework for arbitrage detection via integer programming
+- Shows combinatorial arb is underexploited (0.24% of profits despite ~40% of opportunities)
+- Directly actionable: the integer programming approach can be implemented
+
+## Risks
+
+- Simple YES-NO bundle arb is already saturated by sub-100ms bots
+- Combinatorial arb is mathematically complex and often unprofitable (62% failure rate)
+- Paper is from Aug 2025 — market conditions have evolved significantly
+- Dynamic fee model introduced 2026 changed profitability calculations
 
 ## Implementability: 3/5
-The methodology is clear but requires significant data infrastructure. The combinatorial detection algorithm (integer programming over condition graphs) is the most valuable — could be built as a standalone scanner.
+
+Strong theoretical framework. The integer programming approach for combinatorial arb is implementable but complex. Simple bundle arb is too competitive.
+
+## Status: REFERENCE
