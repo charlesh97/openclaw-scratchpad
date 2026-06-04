@@ -1,25 +1,36 @@
 # Arbitrage Analysis in Polymarket NBA Markets
 
-**Source:** arXiv:2605.00864 — https://arxiv.org/abs/2605.00864
-**Authors:** Guang Cheng et al.
-**Published:** April 2026
+**Source:** https://arxiv.org/abs/2605.00864  
+**Recommendation:** MEDIUM  
+**Published:** April 22, 2026  
+
+## Summary
+
+Empirical study of arbitrage opportunities in Polymarket NBA Moneyline and Spread markets. Finds that combinatorial arb across Moneyline-Spread pairs is more frequent (290 active episodes), concentrated in final minutes of live play. BUT 76.9% of opportunities are limited to just 14.8 shares average — severely liquidity-constrained.
 
 ## Key Findings
-Systematic empirical analysis of algorithmic arbitrage in Polymarket's NBA game markets:
-- **75M+ limit order book snapshots** across 173 games
-- **Single-market arb:** Only 7 executable in-game episodes (median duration: 3.6 seconds)
-- **Combinatorial arb:** 290 active episodes, concentrated in final minutes
-- **Median return:** 101 basis points per combinatorial arb
-- **Liquidity bottleneck:** 76.9% of opportunities limited to 14.8 shares average size
-- The theoretical "Middle" jackpot (both Moneyline + Spread pays) is never empirically realized
+
+1. **Moneyline-Spread Combinatorial Arb** — 290 episodes, concentrated in final minutes
+2. **Liquidity Ceiling** — 76.9% constrained to 14.8 shares average ($14.80 market value)
+3. **Limits-to-Arbitrage** — confirms Shleifer & Vishny (1997): execution frictions prevent full correction even when mispricing is unambiguous
+4. **Actionable at retail scale only** — opportunities exist but are structurally small
 
 ## Why It Matters
-Confirms that while mispricings exist in Polymarket sports markets, they are **structurally bounded by liquidity** — risk-free extraction is strictly retail-scale. This validates the "limits to arbitrage" framework in decentralized markets.
 
-## Implementability: 4/5
-The methodology (continuous market state reconstruction from snapshots) is directly applicable to live monitoring. The finding that 76.9% of arb is <15 shares suggests focusing on high-frequency, small-size execution for sports arb.
+- Shows liquid sports markets still have exploitable arb
+- But the size limit means it's only interesting for retail-scale accounts
+- Validates the "liquidity shallowness" theory in decentralized prediction markets
+- Directly applicable to NBA/non-crypto markets
 
-## Next Steps
-1. Replicate the methodology for live NBA market monitoring
-2. Test automated small-size execution (under 15 shares) during final minutes
-3. Extend analysis to UFC/NFL markets
+## Risks
+
+- Only NBA Moneyline and Spread studied — not generalizable to all sports
+- Liquidity constraints mean no institutional deployment possible
+- Live-play concentration means you need quick execution during game events
+- Polymarket sports markets have thinner liquidity than crypto markets
+
+## Implementability: 2/5
+
+Interesting academically but limited practical value due to liquidity constraints. Only useful as a supplementary strategy for very small capital.
+
+## Status: QUEUED
