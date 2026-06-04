@@ -1,37 +1,52 @@
-# BTC 15-Minute Trading Bot
+# Polymarket BTC 15-Minute Trading Bot
 
-**Source:** https://github.com/aulekator/Polymarket-BTC-15-Minute-Trading-Bot
+**Source:** https://github.com/aulekator/Polymarket-BTC-15-Minute-Trading-Bot  
+**Recommendation:** YES ✅  
+**Language:** Python 3.14+  
+**Architecture:** 7-phase pipeline  
 
 ## What It Does
 
-A production-grade algorithmic trading bot specifically for Polymarket's **15-minute BTC price prediction markets**. Built with a 7-phase architecture:
+A production-grade algorithmic trading bot for Polymarket's 15-minute BTC price prediction markets. Uses a modular 7-phase architecture combining multiple signal sources (spike detection, sentiment analysis, price divergence), professional risk management ($1 max per trade, stop-loss, take-profit), and self-learning capabilities that automatically optimize signal weights.
 
-1. **Ingestion** — Unify & validate data from Coinbase, Binance, News feeds, Solana
-2. **Nautilus Core** — Trading framework
-3. **Signal Processors** — Spike Detection, Sentiment Analysis, Price Divergence
-4. **Fusion Engine** — Weighted voting across signals
-5. **Risk Management** — $1 max per trade, 30% stop loss, 20% take profit
-6. **Execution** — Polymarket order routing
-7. **Self-Learning** — Automatic weight optimization based on performance
+## Architecture (7-Phase)
 
-## Key Features
-- **Multi-signal intelligence** (spike, sentiment, divergence)
-- **Dual-mode** — toggle between simulation and live without restart
-- **Grafana dashboards** + Prometheus metrics
-- **WebSocket auto-reconnection** + rate limiting
-- **Paper trading** with full P&L tracking
+```
+Input (Coinbase, Binance, News, Solana) 
+  → Ingestion (unify & validate) 
+  → Nautilus Core (trading framework) 
+  → Signal Processors (Spike, Sentiment, Divergence) 
+  → Fusion Engine (weighted voting) 
+  → Risk Management ($1 max, stop-loss) 
+  → Execution (Polymarket orders) 
+  → Monitoring (Grafana dashboard) 
+  → Learning (weight optimization, feedback loop)
+```
+
+## Why It Matters
+
+- **Most complete bot found** — covers the full pipeline from data ingestion to execution
+- **Self-learning** — automatically optimizes signal weights from performance feedback
+- **Professional risk mgmt** — $1 max/trade, 30% stop-loss, 20% take-profit defaults
+- **Dual-mode** — paper trading (simulation) and live mode without restart
+- **Auto-recovery** — WebSocket reconnection, rate limiting, data validation
+- **Monitoring** — Grafana + Prometheus dashboards
 
 ## Risks
-- Narrow focus: only BTC 15-minute markets
-- Polymarket's new **dynamic taker fees** directly target this strategy type
-- Multi-signal latency may miss short windows
-- Self-learning adds complexity without proven edge
 
-## Implementability: 3/5
+- Strategy dependent on BTC-15m market microstructure which Polymarket changes (dynamic fees introduced 2026)
+- Uses Nautilus Trader framework — adds dependency complexity
+- Paper trading ≠ live edge; slippage and latency in simulation differ significantly
+- $1 max per trade limits upside; scaling needs careful risk review
+- Requires Redis for mode switching (additional infra)
 
-Good documentation and architecture, but the narrow BTC 15-min focus and dynamic fee headwind reduce applicability. Architecture patterns (multi-signal fusion, risk framework) are worth extracting.
+## Implementability: 4/5
+
+Well-documented, Python-based, clear setup instructions. Moderate infra requirements (Redis, Grafana optional). Can run in paper mode immediately.
 
 ## Next Steps
-1. Test in simulation mode to evaluate signal quality
-2. Assess impact of Polymarket's dynamic fee structure
-3. Consider expanding architecture to multi-market
+
+1. Clone and run in simulation mode with paper data
+2. Tune signal weights for current market regime
+3. Validate against Polymarket's dynamic fee model
+4. Consider scaling parameters for live deployment
