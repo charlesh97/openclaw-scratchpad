@@ -1,41 +1,40 @@
-# Polymarket Order Book Microstructure (Anatomy Paper)
+# The Anatomy of a Decentralized Prediction Market
 
 **Source:** https://arxiv.org/abs/2604.24366  
-**Recommendation:** MEDIUM
+**Recommendation:** MEDIUM  
+**Published:** April 27, 2026  
 
 ## Summary
 
-A comprehensive microstructure study of Polymarket using 30 billion order book events over 52 days, joined to on-chain trade records. Analyzes 600 markets across categories.
+The first comprehensive tick-level microstructure study of Polymarket using 30 billion order-book events over 52 days across 600 pre-registered markets. Provides the foundational empirical evidence for understanding Polymarket market structure, latency dynamics, and trader behavior.
 
-## Key Findings
+## Key Findings (8 Stylized Facts)
 
-1. **Longshot Spread Premium** — Longshot outcomes have wider spreads, consistent with traditional finance
-2. **Depth Profile** — More uniform than top-of-book pattern, closer to geometric grid
-3. **Null Block-Clock Effect** — Block production timing does not correlate with market activity
-4. **Maker Diversity** — Broad wallet diversity with concentrated tail
-5. **Category Spread Differences** — Effective spread varies significantly by market category
-6. **Archive Delay** — Sub-50ms median ingestion delay with multi-second tail
-7. **Wash Trading** — Median 1% self-counterparty trading (well below unregulated crypto benchmarks)
-8. **Depth Determinants** — Market duration, price level, and volume explain depth; no residual time-to-close effect
-
-## Critical Measurement Result
-
-Trade direction inferred from Polymarket's public order-book feed agrees with on-chain ground truth on only ~59% of buckets — well below the ~80% accuracy of Lee-Ready on Nasdaq. Researchers must use on-chain OrderFilled events for trade direction.
+1. **Longshot Spread Premium** — longshot outcomes have wider bid-ask spreads
+2. **Uniform Depth Profile** — order book depth is closer to uniform than concentrated at top-of-book
+3. **No Block-Clock Alignment** — no evidence of block timing manipulation
+4. **Broad Maker Diversity** — many unique wallets providing liquidity, but with a concentrated tail
+5. **Category-Conditional Spreads** — effective spreads vary significantly by market category
+6. **Sub-50ms Median Ingestion** — median archive delay is <50ms but with multi-second tail
+7. **1% Median Wash Share** — self-counterparty trades at median 1%, upper tail at 22%
+8. **Wash Trading Below CEX Benchmarks** — well below traditional exchange wash rates (Cong et al.)
 
 ## Why It Matters
 
-Essential reading for anyone building trading bots on Polymarket. The measurement result about trade direction accuracy is critical — using the public feed alone will lead to incorrect conclusions. The paper provides a replication package with the join code.
+- First large-scale microstructure paper with actual order-book data from Polymarket
+- 30 billion events analyzed — highest granularity study to date
+- Directly relevant for building latency-sensitive strategies
+- Wash trading data is important for strategy replication reliability
 
-## Implementability: 1/5 (Research paper, not implementation)
+## Implications for Trading
 
-Pure research — no code to deploy. But the findings directly inform strategy design:
+- Median 50ms ingestion delay means fast arbitrage is possible but tail latency hurts
+- 1% wash share is noise-level; 22% tail means some markets have significant fake volume
+- Category spreads vary — some categories are more profitable for market-making
+- Uniform depth profile means you can trade beyond top-of-book with less impact than expected
 
-- Don't rely on order-book feed for trade direction
-- Account for category-specific spread differences
-- Design for the depth profile (uniform, not top-of-book)
+## Implementability: 3/5
 
-## Next Steps
+Academic paper. Provides essential context but no executable code. Must build own implementation.
 
-- Download replication package from GitHub/replication repo
-- Validate findings on live data
-- Use depth profile findings to design quoting strategy
+## Status: REFERENCE
